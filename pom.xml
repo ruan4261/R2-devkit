@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.r2</groupId>
+    <artifactId>devkit</artifactId>
+    <version>0.0.1</version>
+    <name>r2-devkit</name>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <inceptionYear>2020</inceptionYear>
+    <description>
+        R2-devkit是开源的轻量级且微状态的Java开发工具，需要Java8或以上的编译环境，依赖于多种第三方SDK，目的是提供多种开发常用的API接口。
+        主要提供功能包括基类操作，字符串操作，数据框架操作，序列化与反序列化，IO流操作，http短连接。
+    </description>
+
+    <developers>
+        <developer>
+            <id>4261</id>
+            <name>ruan4261</name>
+            <email>i@4261.ink</email>
+            <url>https://4261.ink</url>
+            <timezone>+8</timezone>
+            <roles>
+                <role>Master</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.12</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.5.12</version>
+        </dependency>
+
+    </dependencies>
+</project>
