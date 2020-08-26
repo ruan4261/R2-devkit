@@ -12,7 +12,7 @@ import java.util.Base64;
  *
  * @author ruan4261
  */
-public interface Encode {
+public interface Base64Encoder {
 
     /**
      * 输入流转base64

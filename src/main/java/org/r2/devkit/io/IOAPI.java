@@ -12,6 +12,25 @@ import java.net.URLConnection;
 public interface IOAPI {
 
     /**
+     * 写二进制java对象
+     */
+    static void outputObjectStream(String path, Object object) throws IOException {
+        try (ObjectOutput output = new ObjectOutputStream(new FileOutputStream(path))) {
+            output.writeObject(object);
+            output.flush();
+        }
+    }
+
+    /**
+     * 读二进制java对象
+     */
+    static Object inputObjectStream(String path) throws IOException, ClassNotFoundException {
+        try (ObjectInput input = new ObjectInputStream(new FileInputStream(path))) {
+            return input.readObject();
+        }
+    }
+
+    /**
      * 下载资源到本地，保存路径不存在可以自动创建。
      *
      * @param url      远程资源路径

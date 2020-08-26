@@ -9,7 +9,7 @@ import java.util.Base64;
  *
  * @author ruan4261
  */
-public interface Decode {
+public interface Base64Decoder {
 
     static byte[] base64ToByteArray(byte[] base64) {
         Assert.notNull(base64);
