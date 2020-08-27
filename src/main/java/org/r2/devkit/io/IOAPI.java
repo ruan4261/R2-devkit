@@ -12,10 +12,17 @@ import java.net.URLConnection;
 public interface IOAPI {
 
     /**
-     * 写二进制java对象
+     * 写二进制java对象，覆盖原文件
      */
     static void outputObjectStream(String path, Object object) throws IOException {
-        try (ObjectOutput output = new ObjectOutputStream(new FileOutputStream(path))) {
+        outputObjectStream(path, object, false);
+    }
+
+    /**
+     * 写二进制java对象，覆盖原文件参数可选
+     */
+    static void outputObjectStream(String path, Object object, boolean append) throws IOException {
+        try (ObjectOutput output = new ObjectOutputStream(new FileOutputStream(path, append))) {
             output.writeObject(object);
             output.flush();
         }

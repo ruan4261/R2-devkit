@@ -14,33 +14,40 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class EnvArgument implements CacheBase {
 
-    private static final Map<String, Object> env;
+    private static final EnvArgument instance;
+
+    private final Map<String, Object> env;
 
     static {
-        env = new ConcurrentHashMap<>();
+        instance = new EnvArgument();
     }
 
     private EnvArgument() {
+        env = new ConcurrentHashMap<>();
     }
 
-    public static void put(String key, Object value) {
-        env.put(key, value);
+    public EnvArgument env() {
+        return instance;
     }
 
-    public static Object get(String key) {
-        return env.get(key);
+    public void put(String key, Object value) {
+        this.env.put(key, value);
     }
 
-    public static String getString(String key) {
-        return Cast.toString(env.get(key));
+    public Object get(String key) {
+        return this.env.get(key);
     }
 
-    public static void clear() {
-        env.clear();
+    public String getString(String key) {
+        return Cast.toString(this.env.get(key));
     }
 
-    public static int size() {
-        return env.size();
+    public void clear() {
+        this.env.clear();
+    }
+
+    public int size() {
+        return this.env.size();
     }
 
 }

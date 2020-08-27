@@ -15,7 +15,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
-import org.r2.devkit.serialize.JSONObject;
 import org.r2.devkit.util.Assert;
 
 import java.io.File;
@@ -29,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 简单的无状态的HttpApi基于{@code org.apache.http}。
+ * 简单的无状态的HttpApi基于{@link org.apache.http}。
  *
  * @author ruan4261
  * @see org.apache.http
