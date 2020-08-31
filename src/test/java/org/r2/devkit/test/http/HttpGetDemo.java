@@ -1,4 +1,4 @@
-package org.r2.devkit.test;
+package org.r2.devkit.test.http;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;

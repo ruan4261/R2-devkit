@@ -1,4 +1,4 @@
-package org.r2.devkit.test;
+package org.r2.devkit.test.http;
 
 import org.r2.devkit.core.SystemAPI;
 
