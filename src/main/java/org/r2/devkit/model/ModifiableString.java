@@ -2,7 +2,7 @@ package org.r2.devkit.model;
 
 import org.r2.devkit.util.Assert;
 
-import java.util.Objects;
+import java.io.Serializable;
 
 import static org.r2.devkit.core.CacheBase.EMPTY;
 
@@ -14,8 +14,8 @@ import static org.r2.devkit.core.CacheBase.EMPTY;
  *
  * @author ruan4261
  */
-public class ModifiableString {
-
+public final class ModifiableString implements Cloneable, Serializable {
+    private static final long serialVersionUID = 1L;
     private boolean nullAble;
 
     private String value;

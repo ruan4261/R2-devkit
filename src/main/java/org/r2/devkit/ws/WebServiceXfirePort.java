@@ -10,7 +10,7 @@ import java.net.URL;
  *
  * @author gsw
  */
-public class WebServiceXfirePort {
+public final class WebServiceXfirePort {
 
     /**
      * 通过WSDL地址动态创建客户端进行调用

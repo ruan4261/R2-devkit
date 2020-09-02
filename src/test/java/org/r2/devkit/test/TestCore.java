@@ -23,6 +23,14 @@ public abstract class TestCore {
         out.println(val);
     }
 
+    public static void print(Object obj) {
+        print(obj.toString());
+    }
+
+    public static void printf(String format, Object... args) {
+        out.printf(format, args);
+    }
+
     public static void line() {
         line(1);
     }

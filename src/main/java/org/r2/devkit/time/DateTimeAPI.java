@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * 日期与时间接口，基于{@code java.time}
- * 以系统当前时区为准，获取时间戳请使用{@link weaver.micro.devkit.core.SystemAPI#currentTimestamp()}
+ * 以系统当前时区为准，获取时间戳请使用{@link org.r2.devkit.core.SystemAPI#currentTimestamp()}
  *
  * @author ruan4261
  */
