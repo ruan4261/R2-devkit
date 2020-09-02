@@ -6,7 +6,7 @@ package org.r2.devkit.json;
  *
  * @author ruan4261
  */
-public abstract class JSON implements JsonAware {
+public abstract class JSON implements JSONAware {
 
     public abstract String toString();
 

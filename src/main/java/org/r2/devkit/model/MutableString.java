@@ -14,13 +14,13 @@ import static org.r2.devkit.core.CacheBase.EMPTY;
  *
  * @author ruan4261
  */
-public final class ModifiableString implements Cloneable, Serializable {
+public final class MutableString implements Cloneable, Serializable {
     private static final long serialVersionUID = 1L;
     private boolean nullAble;
 
     private String value;
 
-    public ModifiableString(String value, boolean nullAble) {
+    public MutableString(String value, boolean nullAble) {
         this.nullAble = nullAble;
         if (!nullAble) Assert.notNull(value, "value");
         this.value = value;
@@ -51,7 +51,7 @@ public final class ModifiableString implements Cloneable, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
-        ModifiableString that = (ModifiableString) o;
+        MutableString that = (MutableString) o;
         return this.value.equals(that.value);
     }
 

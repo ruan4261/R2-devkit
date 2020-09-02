@@ -9,7 +9,7 @@ import org.r2.devkit.util.Assert;
 /**
  * @author ruan4261
  */
-public interface JsonAware {
+public interface JSONAware {
 
     JSONField getEnumType();
 
