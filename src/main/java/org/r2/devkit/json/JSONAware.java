@@ -11,6 +11,8 @@ import org.r2.devkit.util.Assert;
  */
 public interface JSONAware {
 
+    String toJSONString();
+
     JSONField getEnumType();
 
     /**
@@ -24,9 +26,9 @@ public interface JSONAware {
         for (int i = 0; i < len; i++) {
             char c = json.charAt(i);
             if (JSONToken.isIgnorable(c)) continue;
-            if (JSONToken.LBRACE.getChar() == c)
+            if (JSONToken.LBRACE == c)
                 return JSONObject.parse(json);
-            if (JSONToken.LBRACKET.getChar() == c)
+            if (JSONToken.LBRACKET == c)
                 return JSONArray.parse(json);
             throw new StringParseException("JsonAware Cannot parse string : " + json);
         }

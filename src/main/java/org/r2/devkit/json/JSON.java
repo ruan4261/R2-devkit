@@ -2,7 +2,7 @@ package org.r2.devkit.json;
 
 /**
  * Json对象
- * 必须重写toString，输出实际内容
+ * 必须重写toString
  *
  * @author ruan4261
  */

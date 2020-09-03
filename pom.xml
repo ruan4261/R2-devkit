@@ -15,8 +15,8 @@
 
     <inceptionYear>2020</inceptionYear>
     <description>
-        R2-devkit是开源的轻量级且微状态的Java开发工具，需要Java8或以上的编译环境，依赖于多种第三方SDK，目的是提供多种开发常用的API接口。
-        主要提供功能包括基类操作，字符串操作，数据框架操作，序列化与反序列化，IO流操作，http短连接。
+        R2-devkit是开源的轻量级Java开发组件，需要Java8或以上的编译环境，依赖于少量第三方SDK。
+        主要实现包括基类操作，JSON解析构造，数据框架操作，序列化与反序列化，IO流操作，http短连接。
     </description>
 
     <developers>
@@ -45,11 +45,18 @@
             <artifactId>httpmime</artifactId>
             <version>4.5.12</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.codehaus.xfire/xfire-core -->
-        <dependency>
-            <groupId>org.codehaus.xfire</groupId>
-            <artifactId>xfire-core</artifactId>
-            <version>1.2.6</version>
-        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -2,6 +2,10 @@ package org.r2.devkit.util;
 
 import org.r2.devkit.exception.runtime.IllegalDataException;
 
+import java.lang.reflect.Array;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 一套组合拳，打的调用者找不着bug。
  *
@@ -10,47 +14,104 @@ import org.r2.devkit.exception.runtime.IllegalDataException;
 public final class Assert {
 
     private Assert() {
-        throw new AssertionError("No Assert instances for you!");
+        throw new AssertionError("No Assert instance for you!");
     }
 
-    public static void notEmpty(String arg, String mes) {
-        if (arg == null || arg.trim().length() == 0) fail(mes);
+    public static void notEmpty(Object arg) {
+        notNull(arg);
+        notEmpty(arg, null);
     }
 
-    public static void notEmpty(String arg) {
-        if (arg == null || arg.trim().length() == 0) fail();
+    /**
+     * 支持判断如下类型
+     * 1.CharSequence
+     * 2.Map
+     * 3.List
+     * 4.Native Array
+     * 不属于以上类型且不为Null时不做判断
+     */
+    public static void notEmpty(Object arg, String mes) {
+        notNull(arg, mes);
+        if (arg instanceof CharSequence) {
+            if (((CharSequence) arg).length() == 0) fail(mes);
+        } else if (arg instanceof Map) {
+            if (((Map) arg).isEmpty()) fail(mes);
+        } else if (arg instanceof List) {
+            if (((List) arg).isEmpty()) fail(mes);
+        } else if (arg.getClass().isArray()) {
+            int len = Array.getLength(arg);
+            if (len == 0) fail(mes);
+        }
+    }
+
+    /**
+     * 判断偏移量是否合法
+     * 支持判断如下类型
+     * 1.CharSequence
+     * 2.Map
+     * 3.List
+     * 4.Native Array
+     * 不属于以上类型且不为Null时不做判断
+     */
+    public static void legalOffset(Object arg, int offset) {
+        notNull(arg, "Arg cannot be NULL!");
+        int len = -1;
+        if (arg instanceof CharSequence) {
+            len = ((CharSequence) arg).length();
+        } else if (arg instanceof Map) {
+            len = ((Map) arg).size();
+        } else if (arg instanceof List) {
+            len = ((List) arg).size();
+        } else if (arg.getClass().isArray()) {
+            len = Array.getLength(arg);
+        }
+
+        if (len == -1) return;
+        if (offset < 0 || offset >= len)
+            fail("Array length is " + len + ", but offset is " + offset);
     }
 
     public static void notNull(Object arg, String mes) {
-        if (arg == null) fail(mes);
+        if (arg == null) npe(mes);
     }
 
     public static void notNull(Object arg) {
-        if (arg == null) fail();
+        notNull(arg, null);
     }
 
     public static void notNegAndZero(Number num) {
-        if (num.intValue() <= 0) fail();
+        notNull(num);
+        notNegAndZero(num, null);
     }
 
     public static void notNegAndZero(Number num, String mes) {
+        notNull(num, mes);
         if (num.intValue() <= 0) fail(mes);
     }
 
     public static void notNeg(Number num) {
-        if (num.intValue() < 0) fail();
+        notNull(num);
+        notNeg(num, null);
     }
 
     public static void notNeg(Number num, String mes) {
+        notNull(num, mes);
         if (num.intValue() < 0) fail(mes);
     }
 
     public static IllegalDataException fail() throws IllegalDataException {
-        throw new IllegalDataException();
+        throw fail(null);
     }
 
     public static IllegalDataException fail(String mes) throws IllegalDataException {
         throw new IllegalDataException(mes);
     }
 
+    public static NullPointerException npe() throws NullPointerException {
+        throw new NullPointerException(null);
+    }
+
+    public static NullPointerException npe(String mes) throws NullPointerException {
+        throw new NullPointerException(mes);
+    }
 }

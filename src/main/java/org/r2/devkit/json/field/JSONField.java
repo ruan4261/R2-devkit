@@ -8,45 +8,51 @@ package org.r2.devkit.json.field;
  */
 public enum JSONField {
 
-    JsonObject(JSONObject.class) {
+    JSONObject(JSONObject.class) {
         @Override
-        public JSONObject getFieldInstance() {
+        public JSONObject getEmptyInstance() {
             return new JSONObject();
         }
     },
-    JsonArray(JSONArray.class) {
+    JSONArray(JSONArray.class) {
         @Override
-        public JSONArray getFieldInstance() {
+        public JSONArray getEmptyInstance() {
             return new JSONArray();
         }
     },
-    JsonKey(JSONKey.class) {
+    JSONDomain(JSONDomain.class) {
         @Override
-        public JSONKey getFieldInstance() {
+        public JSONDomain getEmptyInstance() {
+            return new JSONDomain();
+        }
+    },
+    JSONKey(JSONKey.class) {
+        @Override
+        public JSONKey getEmptyInstance() {
             return new JSONKey();
         }
     },
-    JsonValueString(JSONValueString.class) {
+    JSONValueString(JSONValueString.class) {
         @Override
-        public JSONValueString getFieldInstance() {
+        public JSONValueString getEmptyInstance() {
             return new JSONValueString();
         }
     },
-    JsonValueNumber(JSONValueNumber.class) {
+    JSONValueNumber(JSONValueNumber.class) {
         @Override
-        public JSONValueNumber getFieldInstance() {
+        public JSONValueNumber getEmptyInstance() {
             return new JSONValueNumber();
         }
     },
-    JsonValueBoolean(JSONValueBoolean.class) {
+    JSONValueBoolean(JSONValueBoolean.class) {
         @Override
-        public JSONValueBoolean getFieldInstance() {
+        public JSONValueBoolean getEmptyInstance() {
             return new JSONValueBoolean();
         }
     },
-    JsonValueNull(JSONValueNull.class) {
+    JSONValueNull(JSONValueNull.class) {
         @Override
-        public JSONValueNull getFieldInstance() {
+        public JSONValueNull getEmptyInstance() {
             return new JSONValueNull();
         }
     };
@@ -61,5 +67,5 @@ public enum JSONField {
         return this.clazz;
     }
 
-    public abstract Object getFieldInstance();
+    public abstract Object getEmptyInstance();
 }

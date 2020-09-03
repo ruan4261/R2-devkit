@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
  * @author ruan4261
  */
 public interface CacheBase {
-    String NULL = "NULL";
+    String NULL = "null";
     String EMPTY = "";
     String SUCCESS = "SUCCESS";
     String FAIL = "FAIL";
