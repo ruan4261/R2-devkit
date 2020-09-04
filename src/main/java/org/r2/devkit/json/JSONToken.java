@@ -12,13 +12,6 @@ public final class JSONToken {
     }
 
     /*
-    反斜杠，表转义，其在JSON字符串中无法单独出现
-    如JSON字符串中需出现此符号，则应用双反斜杠表不转义，如 \\
-    由此，在IDE中显式地书写JSON字符串时，欲表示单个反斜杠，应用四个反斜杠 \\\\ 表示
-    */
-    public static final char REVERSE_SOLIDUS = '\\'; // u005c %5C \
-
-    /*
     JSON语法符号
     [需转义]
     代表其符号如果出现在JSON字符串中，并无特殊含义，必须用反斜杠转义
@@ -51,14 +44,25 @@ public final class JSONToken {
     public static final char CARRIAGE_RETURN = '\r';    // u0013 %0D \r
     public static final char TAB = '\t';                // u0009 %09 \t
 
+    /*
+    反斜杠，表转义，其在JSON字符串中无法单独出现
+    如JSON字符串中需出现此符号，则应用双反斜杠表不转义，如 \\
+    由此，在IDE中显式地书写JSON字符串时，欲表示单个反斜杠，应用四个反斜杠 \\\\ 表示
+    */
+    public static final char REVERSE_SOLIDUS = '\\'; // u005c %5C \
+
     /* 其他可转义的符号 */
     public static final char SOLIDUS = '/';             // u002F [其转义不转义无任何区别，但如果其之前有反斜杠，反斜杠将被忽略]
     public static final char UNICODE_CHAR = 'u';        // u0075 -> uXXXX 代表Unicode编码的转义，此字符后还需要4个十六进制单位
-    public static final char BACKSPACE_CHAR = 'b';      // u0062 -> u0008
     public static final char LINE_FEED_CHAR = 'n';      // u006E -> u0010
-    public static final char FORM_FEED_CHAR = 'f';      // u0066 -> u000C
-    public static final char CARRIAGE_RETURN_CHAR = 'r';// u0072 -> u000D
     public static final char TAB_CHAR = 't';            // u0074 -> u0009
+    public static final char CARRIAGE_RETURN_CHAR = 'r';// u0072 -> u000D
+    public static final char BACKSPACE_CHAR = 'b';      // u0062 -> u0008
+    public static final char FORM_FEED_CHAR = 'f';      // u0066 -> u000C
+
+    /* 其他转义后的符号枚举 */
+    public static final char BACKSPACE = '\b';          // u0008 %08 \b
+    public static final char FORM_FEED = '\f';          // u000C %0C \f
 
     /**
      * 在非键值内容的情况下，即解析JSON语法模式的情况下

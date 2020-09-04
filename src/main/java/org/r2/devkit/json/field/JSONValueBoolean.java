@@ -1,7 +1,5 @@
 package org.r2.devkit.json.field;
 
-import java.io.Serializable;
-
 /**
  * 表明JSON中的Boolean值
  * JSONString表现为
@@ -9,7 +7,7 @@ import java.io.Serializable;
  *
  * @author ruan4261
  */
-public final class JSONValueBoolean extends JSONValue implements Cloneable, Serializable {
+public final class JSONValueBoolean extends JSONValue {
     private static final long serialVersionUID = 1L;
     private static final JSONField TYPE = JSONField.JSONValueBoolean;
     private static final String TRUE = "true";
@@ -21,6 +19,13 @@ public final class JSONValueBoolean extends JSONValue implements Cloneable, Seri
     }
 
     public void setContainer(boolean container) {
+        this.container = container;
+    }
+
+    public JSONValueBoolean() {
+    }
+
+    public JSONValueBoolean(boolean container) {
         this.container = container;
     }
 

@@ -7,33 +7,12 @@ package org.r2.devkit.exception;
  */
 public class StringParseException extends RuntimeException {
     private static final long serialVersionUID = 1L;
-    private String exceptionString;
 
-    public StringParseException(String string) {
-        super();
-        this.exceptionString = string;
-    }
-
-    public StringParseException(String message, String string) {
+    public StringParseException(String message) {
         super(message);
-        this.exceptionString = string;
     }
 
-    public StringParseException(Throwable ex, String string) {
+    public StringParseException(Throwable ex) {
         super(ex);
-        this.exceptionString = string;
-    }
-
-    public String getExceptionString() {
-        return exceptionString;
-    }
-
-    public void setExceptionString(String exceptionString) {
-        this.exceptionString = exceptionString;
-    }
-
-    @Override
-    public String getMessage() {
-        return super.getMessage() + ", exception string : " + exceptionString;
     }
 }

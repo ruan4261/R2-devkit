@@ -1,4 +1,4 @@
-package org.r2.devkit.model;
+package org.r2.devkit;
 
 import org.r2.devkit.util.Assert;
 

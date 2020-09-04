@@ -1,9 +1,12 @@
 package org.r2.devkit.json.field;
 
-import org.r2.devkit.json.JSON;
+import org.r2.devkit.exception.StringParseException;
+import org.r2.devkit.json.JSONToken;
+import org.r2.devkit.json.util.JSONParseCheck;
+import org.r2.devkit.json.util.JSONStringParser;
+import org.r2.devkit.json.util.ParseHolder;
 import org.r2.devkit.util.Assert;
 
-import java.io.Serializable;
 import java.util.*;
 
 import static org.r2.devkit.json.JSONToken.*;
@@ -15,7 +18,7 @@ import static org.r2.devkit.json.JSONToken.*;
  *
  * @author ruan4261
  */
-public final class JSONArray extends JSON implements List<JSONObject>, Cloneable, Serializable {
+public final class JSONArray extends JSONValue implements List<JSONObject> {
     private static final long serialVersionUID = 1L;
     private static final JSONField TYPE = JSONField.JSONArray;
     private final List<JSONObject> container;
@@ -33,15 +36,17 @@ public final class JSONArray extends JSON implements List<JSONObject>, Cloneable
         this.container = new ArrayList<>(list);
     }
 
-    public static JSONArray parse(Object object) {
-        if (object instanceof String) {
-            return parse(((String) object).toCharArray(), 0);
-        }
-        return null;
-    }
+    /**
+     * 用户调用接口
+     * 完整解析
+     */
+    public static JSONArray parse(String str) {
+        ParseHolder<JSONArray> holder = JSONStringParser.parse2JSONArray(str, 0);
 
-    public static JSONArray parse(char[] chars, int offset) {
-        return null;
+        // 判断字符串剩余部分是否可忽略，不可忽略则抛出异常
+        JSONParseCheck.ignore(str, holder.getOffset(), "CharSequence cannot parse to JSONArray : " + str);
+
+        return holder.getObject();
     }
 
     @Override
@@ -52,9 +57,7 @@ public final class JSONArray extends JSON implements List<JSONObject>, Cloneable
     @Override
     public String toJSONString() {
         final StringBuilder builder = new StringBuilder(String.valueOf(LBRACKET));
-        container.forEach(object -> {
-            builder.append(object.toJSONString()).append(COMMA);
-        });
+        container.forEach(object -> builder.append(object.toJSONString()).append(COMMA));
 
         int last = builder.length() - 1;
         if (builder.charAt(last) == COMMA)
