@@ -1,5 +1,7 @@
 package org.r2.devkit.json.field;
 
+import org.r2.devkit.json.JSON;
+
 /**
  * 表明JSON中的Number值
  * JSONString表现为等科学计数法，只允许传输十进制数据
@@ -8,15 +10,9 @@ package org.r2.devkit.json.field;
  * todo
  * @author ruan4261
  */
-public final class JSONValueNumber extends JSONValue {
+public final class JSONValueNumber extends JSON {
     private static final long serialVersionUID = 1L;
-    private static final JSONField TYPE = JSONField.JSONValueNumber;
     private Number container;
-
-    @Override
-    public String toString() {
-        return this.container.toString();
-    }
 
     @Override
     public String toJSONString() {
@@ -24,7 +20,7 @@ public final class JSONValueNumber extends JSONValue {
     }
 
     @Override
-    public JSONField getEnumType() {
-        return TYPE;
+    public Object clone() {
+        return null;
     }
 }

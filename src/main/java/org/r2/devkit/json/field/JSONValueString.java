@@ -1,7 +1,6 @@
 package org.r2.devkit.json.field;
 
-import org.r2.devkit.json.util.JSONStringParser;
-import org.r2.devkit.json.util.ParseHolder;
+import org.r2.devkit.json.JSON;
 
 import static org.r2.devkit.json.JSONToken.*;
 
@@ -12,30 +11,24 @@ import static org.r2.devkit.json.JSONToken.*;
  *
  * @author ruan4261
  */
-public final class JSONStandardString extends JSONValue {
+public final class JSONValueString extends JSON {
     private static final long serialVersionUID = 1L;
-    private static final JSONField TYPE = JSONField.JSONValueString;
     private String container;
 
     public String getContainer() {
         return container;
     }
 
-    public JSONStandardString setContainer(String container) {
+    public JSONValueString setContainer(String container) {
         this.container = container;
         return this;
     }
 
-    public JSONStandardString() {
+    public JSONValueString() {
     }
 
-    public JSONStandardString(String container) {
+    public JSONValueString(String container) {
         this.container = container;
-    }
-
-
-    public static ParseHolder<JSONStandardString> parseValueString(String str, int offset) {
-        return JSONStringParser.parse2JSONValueString(str, offset);
     }
 
     @Override
@@ -49,7 +42,7 @@ public final class JSONStandardString extends JSONValue {
     }
 
     @Override
-    public JSONField getEnumType() {
-        return TYPE;
+    public Object clone() {
+        return new JSONValueString(this.container);
     }
 }

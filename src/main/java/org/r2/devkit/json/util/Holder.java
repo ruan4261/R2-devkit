@@ -6,7 +6,7 @@ package org.r2.devkit.json.util;
  *
  * @author ruan4261
  */
-public final class ParseHolder<T> {
+public final class Holder<T> {
 
     private T object;
 
@@ -16,7 +16,7 @@ public final class ParseHolder<T> {
         return object;
     }
 
-    public ParseHolder<T> setObject(T object) {
+    public Holder<T> setObject(T object) {
         this.object = object;
         return this;
     }
@@ -25,15 +25,15 @@ public final class ParseHolder<T> {
         return offset;
     }
 
-    public ParseHolder<T> setOffset(int offset) {
+    public Holder<T> setOffset(int offset) {
         this.offset = offset;
         return this;
     }
 
-    public ParseHolder() {
+    public Holder() {
     }
 
-    public ParseHolder(T object, int offset) {
+    public Holder(T object, int offset) {
         this.object = object;
         this.offset = offset;
     }

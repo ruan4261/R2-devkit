@@ -1,5 +1,7 @@
 package org.r2.devkit.json.field;
 
+import org.r2.devkit.json.JSON;
+
 /**
  * 表明JSON中的NULL值
  * JSONString表现为
@@ -7,14 +9,20 @@ package org.r2.devkit.json.field;
  *
  * @author ruan4261
  */
-public final class JSONValueNull extends JSONValue {
+public final class JSONValueNull extends JSON {
     private static final long serialVersionUID = 1L;
-    private static final JSONField TYPE = JSONField.JSONValueNull;
     private static final String NULL = "null";
+    private static final JSONValueNull instance;
 
-    @Override
-    public String toString() {
-        return NULL;
+    static {
+        instance = new JSONValueNull();
+    }
+
+    private JSONValueNull() {
+    }
+
+    public static JSONValueNull getInstance() {
+        return instance;
     }
 
     @Override
@@ -22,8 +30,11 @@ public final class JSONValueNull extends JSONValue {
         return NULL;
     }
 
+    /**
+     * 本类禁止克隆
+     */
     @Override
-    public JSONField getEnumType() {
-        return TYPE;
+    public Object clone() {
+        return this;
     }
 }

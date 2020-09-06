@@ -1,79 +1,93 @@
-package org.r2.devkit.json.field;
+package org.r2.devkit.json;
 
 import static org.r2.devkit.json.JSONToken.*;
 
-import org.r2.devkit.exception.StringParseException;
-import org.r2.devkit.json.JSONToken;
+import org.r2.devkit.json.custom.CustomSerializer;
+import org.r2.devkit.json.custom.CustomizableSerialize;
+import org.r2.devkit.json.serialize.JSONSerializer;
 import org.r2.devkit.json.util.JSONParseCheck;
 import org.r2.devkit.json.util.JSONStringParser;
-import org.r2.devkit.json.util.ParseHolder;
+import org.r2.devkit.json.util.Holder;
 import org.r2.devkit.util.Assert;
 
 import java.util.*;
 
 /**
- * 对象类型Json格式化工具
- * JSONString表现为
- * {
- * JSONKey:JSONValue,
- * JSONKey:JSONValue
- * }
- *
  * @author ruan4261
  */
-public final class JSONObject extends JSONValue implements Map<JSONStandardString, JSONValue> {
+public final class JSONObject extends JSON implements CustomizableSerialize, Map<String, Object> {
     private static final long serialVersionUID = 1L;
-    private static final JSONField TYPE = JSONField.JSONObject;
-    private final Map<JSONStandardString, JSONValue> container;
+    private static final int DEFAULT_CAPACITY = 8;
+    private final Map<String, Object> container;
+    // serialization solution
+    private CustomSerializer customSerializer;
 
     public JSONObject() {
-        this(8);
+        this(DEFAULT_CAPACITY);
     }
 
     public JSONObject(int initialCapacity) {
         this.container = new HashMap<>(initialCapacity);
     }
 
-    public JSONObject(Map<JSONStandardString, JSONValue> map) {
-        Assert.notNull(map);
+    public JSONObject(Map<String, Object> map) {
+        Assert.notNull(map, "map");
         this.container = new HashMap<>(map);
     }
 
+    @Override
+    public void setCustomSerializer(CustomSerializer customSerializer) {
+        this.customSerializer = customSerializer;
+    }
+
+    @Override
+    public void addCustomSerializer(CustomSerializer customSerializer) {
+        if (this.customSerializer == null)
+            this.setCustomSerializer(customSerializer);
+        else
+            this.customSerializer.putAll(customSerializer);
+    }
+
+    @Override
+    public CustomSerializer getCustomSerializer() {
+        return this.customSerializer;
+    }
+
     /**
-     * 用户调用接口
-     * 完整解析
+     * 完整字符串解析调用接口
      */
-    public static JSONObject parse(String str) {
-        ParseHolder<JSONObject> holder = JSONStringParser.parse2JSONObject(str, 0);
+    public static JSONObject parseObject(String str) {
+        Holder<JSONObject> holder = JSONStringParser.parse2JSONObject(str, 0);
 
         // 判断字符串剩余部分是否可忽略，不可忽略则抛出异常
-        JSONParseCheck.ignore(str, holder.getOffset(), "CharSequence cannot parse to JSONObject : " + str);
+        JSONParseCheck.ignore(str, holder.getOffset(), "String cannot parse to JSONObject : " + str);
 
         return holder.getObject();
     }
 
-    @Override
-    public String toString() {
-        return toJSONString();
-    }
-
     /**
-     * 输出对象类型的JSON字符串
+     * output json string
      */
     @Override
     public String toJSONString() {
         final StringBuilder builder = new StringBuilder(String.valueOf(LBRACE));
+
+        // body
         container.forEach((k, v) -> {
             // key
-            builder.append(k.toJSONString());
+            builder.append(DOUBLE_QUOT).append(k).append(DOUBLE_QUOT);
+
             // :
             builder.append(COLON);
+
             // value
-            builder.append(v.toJSONString());
+            builder.append(JSONSerializer.serializer(v, this.customSerializer));
+
             // ,
             builder.append(COMMA);
         });
 
+        // delete last comma
         int last = builder.length() - 1;
         if (builder.charAt(last) == COMMA)
             builder.deleteCharAt(last);
@@ -83,11 +97,11 @@ public final class JSONObject extends JSONValue implements Map<JSONStandardStrin
     }
 
     @Override
-    public JSONField getEnumType() {
-        return TYPE;
+    public Object clone() {
+        return new JSONObject(this.container);
     }
 
-    /* Map Override */
+    /* Override */
 
     @Override
     public int size() {
@@ -110,22 +124,22 @@ public final class JSONObject extends JSONValue implements Map<JSONStandardStrin
     }
 
     @Override
-    public JSONValue get(Object key) {
+    public Object get(Object key) {
         return this.container.get(key);
     }
 
     @Override
-    public JSONValue put(JSONStandardString key, JSONValue value) {
+    public Object put(String key, Object value) {
         return this.container.put(key, value);
     }
 
     @Override
-    public JSONValue remove(Object key) {
+    public Object remove(Object key) {
         return this.container.remove(key);
     }
 
     @Override
-    public void putAll(Map<? extends JSONStandardString, ? extends JSONValue> m) {
+    public void putAll(Map<? extends String, ?> m) {
         this.container.putAll(m);
     }
 
@@ -135,17 +149,17 @@ public final class JSONObject extends JSONValue implements Map<JSONStandardStrin
     }
 
     @Override
-    public Set<JSONStandardString> keySet() {
+    public Set<String> keySet() {
         return this.container.keySet();
     }
 
     @Override
-    public Collection<JSONValue> values() {
+    public Collection<Object> values() {
         return this.container.values();
     }
 
     @Override
-    public Set<Entry<JSONStandardString, JSONValue>> entrySet() {
+    public Set<Entry<String, Object>> entrySet() {
         return this.container.entrySet();
     }
 

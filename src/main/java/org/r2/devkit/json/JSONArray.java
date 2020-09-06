@@ -1,10 +1,11 @@
-package org.r2.devkit.json.field;
+package org.r2.devkit.json;
 
-import org.r2.devkit.exception.StringParseException;
-import org.r2.devkit.json.JSONToken;
+import org.r2.devkit.json.custom.CustomSerializer;
+import org.r2.devkit.json.custom.CustomizableSerialize;
+import org.r2.devkit.json.serialize.JSONSerializer;
 import org.r2.devkit.json.util.JSONParseCheck;
 import org.r2.devkit.json.util.JSONStringParser;
-import org.r2.devkit.json.util.ParseHolder;
+import org.r2.devkit.json.util.Holder;
 import org.r2.devkit.util.Assert;
 
 import java.util.*;
@@ -12,39 +13,54 @@ import java.util.*;
 import static org.r2.devkit.json.JSONToken.*;
 
 /**
- * JSONArray是一个数组，其中每个元素必定为JSONObject
- * JSONString表现为
- * [JSONObject,JSONObject]
- *
  * @author ruan4261
  */
-public final class JSONArray extends JSONValue implements List<JSONObject> {
+public final class JSONArray extends JSON implements CustomizableSerialize, List<Object> {
     private static final long serialVersionUID = 1L;
-    private static final JSONField TYPE = JSONField.JSONArray;
-    private final List<JSONObject> container;
+    private static final int DEFAULT_CAPACITY = 8;
+    private final List<Object> container;
+    // serialization solution
+    private CustomSerializer customSerializer;
 
     public JSONArray() {
-        this(8);
+        this(DEFAULT_CAPACITY);
     }
 
     public JSONArray(int initialCapacity) {
         this.container = new ArrayList<>(initialCapacity);
     }
 
-    public JSONArray(Collection<JSONObject> list) {
-        Assert.notNull(list);
+    public JSONArray(Collection<Object> list) {
+        Assert.notNull(list, "list");
         this.container = new ArrayList<>(list);
     }
 
+    @Override
+    public void setCustomSerializer(CustomSerializer customSerializer) {
+        this.customSerializer = customSerializer;
+    }
+
+    @Override
+    public void addCustomSerializer(CustomSerializer customSerializer) {
+        if (this.customSerializer == null)
+            this.setCustomSerializer(customSerializer);
+        else
+            this.customSerializer.putAll(customSerializer);
+    }
+
+    @Override
+    public CustomSerializer getCustomSerializer() {
+        return this.customSerializer;
+    }
+
     /**
-     * 用户调用接口
-     * 完整解析
+     * 完整字符串解析调用接口
      */
-    public static JSONArray parse(String str) {
-        ParseHolder<JSONArray> holder = JSONStringParser.parse2JSONArray(str, 0);
+    public static JSONArray parseArray(String str) {
+        Holder<JSONArray> holder = JSONStringParser.parse2JSONArray(str, 0);
 
         // 判断字符串剩余部分是否可忽略，不可忽略则抛出异常
-        JSONParseCheck.ignore(str, holder.getOffset(), "CharSequence cannot parse to JSONArray : " + str);
+        JSONParseCheck.ignore(str, holder.getOffset(), "String cannot parse to JSONArray : " + str);
 
         return holder.getObject();
     }
@@ -54,11 +70,18 @@ public final class JSONArray extends JSONValue implements List<JSONObject> {
         return toJSONString();
     }
 
+
+    /**
+     * output json string
+     */
     @Override
     public String toJSONString() {
         final StringBuilder builder = new StringBuilder(String.valueOf(LBRACKET));
-        container.forEach(object -> builder.append(object.toJSONString()).append(COMMA));
+        container.forEach(
+                object -> builder.append(JSONSerializer.serializer(object, this.customSerializer)).append(COMMA)
+        );
 
+        // delete last comma
         int last = builder.length() - 1;
         if (builder.charAt(last) == COMMA)
             builder.deleteCharAt(last);
@@ -68,8 +91,8 @@ public final class JSONArray extends JSONValue implements List<JSONObject> {
     }
 
     @Override
-    public JSONField getEnumType() {
-        return TYPE;
+    public Object clone() {
+        return new JSONArray(this.container);
     }
 
     /* List Override */
@@ -90,7 +113,7 @@ public final class JSONArray extends JSONValue implements List<JSONObject> {
     }
 
     @Override
-    public Iterator<JSONObject> iterator() {
+    public Iterator<Object> iterator() {
         return this.container.iterator();
     }
 
@@ -105,7 +128,7 @@ public final class JSONArray extends JSONValue implements List<JSONObject> {
     }
 
     @Override
-    public boolean add(JSONObject o) {
+    public boolean add(Object o) {
         return this.container.add(o);
     }
 
@@ -120,12 +143,12 @@ public final class JSONArray extends JSONValue implements List<JSONObject> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends JSONObject> c) {
+    public boolean addAll(Collection<?> c) {
         return this.container.addAll(c);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends JSONObject> c) {
+    public boolean addAll(int index, Collection<?> c) {
         return this.container.addAll(index, c);
     }
 
@@ -145,22 +168,22 @@ public final class JSONArray extends JSONValue implements List<JSONObject> {
     }
 
     @Override
-    public JSONObject get(int index) {
+    public Object get(int index) {
         return this.container.get(index);
     }
 
     @Override
-    public JSONObject set(int index, JSONObject element) {
+    public Object set(int index, Object element) {
         return this.container.set(index, element);
     }
 
     @Override
-    public void add(int index, JSONObject element) {
+    public void add(int index, Object element) {
         this.container.add(index, element);
     }
 
     @Override
-    public JSONObject remove(int index) {
+    public Object remove(int index) {
         return this.container.remove(index);
     }
 
@@ -175,17 +198,18 @@ public final class JSONArray extends JSONValue implements List<JSONObject> {
     }
 
     @Override
-    public ListIterator<JSONObject> listIterator() {
+    public ListIterator<Object> listIterator() {
         return this.container.listIterator();
     }
 
     @Override
-    public ListIterator<JSONObject> listIterator(int index) {
+    public ListIterator<Object> listIterator(int index) {
         return this.container.listIterator(index);
     }
 
     @Override
-    public List<JSONObject> subList(int fromIndex, int toIndex) {
+    public List<Object> subList(int fromIndex, int toIndex) {
         return this.container.subList(fromIndex, toIndex);
     }
+
 }

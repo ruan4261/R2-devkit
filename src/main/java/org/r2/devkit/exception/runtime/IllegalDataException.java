@@ -11,6 +11,7 @@ package org.r2.devkit.exception.runtime;
  *
  * @author ruan4261
  */
+@SuppressWarnings("serial")
 public class IllegalDataException extends RuntimeException {
 
     public IllegalDataException() {

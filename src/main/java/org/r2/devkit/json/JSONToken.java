@@ -26,19 +26,19 @@ public final class JSONToken {
     public static final char COLON = ':';               // :
 
     /*
-    [特殊的转义]
     JSON格式中的标准引号为双引号
     本解析器允许调用方以单引号作为引号，但本解析器输出字符串总是会以双引号输出
     在解析字符串时，使用了某一种引号，则另一种引号在其内部无需被转义（也可以转义，并无区别)
     输出时，双引号总会被转义，单引号总不会被转义
     例如：
     解析{'key':'value'}字符串时，内部增加双引号无需反斜杠转义，但使用toJSONString输出时，双引号前会有反斜杠
-    解析{"key":"value"}字符串时，内部增加单引号无影响，输出不会增加反斜杠；如果内部增加双引号，输出时会有反斜杠
+    解析{"key":"value"}字符串时，内部增加单引号无影响，输出不会增加反斜杠；
+    如果内部增加双引号，请使用反斜杠转义，否则会报错，输出时双引号前总会有反斜杠；
     */
     public static final char QUOT = '\'';               // '
     public static final char DOUBLE_QUOT = '\"';        // " 这是规范的引号
 
-    /* RFC4627允许json中的任何一个结构字符之前或之后都可以使用无意义的空格，包括如下四种 */
+    /* RFC4627允许json中的任何一个结构字符之前或之后都可以使用无意义的空格，包括如下四种，语法解析时会跳过他们 */
     public static final char SPACE = ' ';               // u0020 %20 空格
     public static final char LINE_FEED = '\n';          // u0010 %0A \n
     public static final char CARRIAGE_RETURN = '\r';    // u0013 %0D \r

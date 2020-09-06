@@ -18,7 +18,6 @@ public final class Assert {
     }
 
     public static void notEmpty(Object arg) {
-        notNull(arg);
         notEmpty(arg, null);
     }
 
@@ -80,7 +79,6 @@ public final class Assert {
     }
 
     public static void notNegAndZero(Number num) {
-        notNull(num);
         notNegAndZero(num, null);
     }
 
@@ -90,7 +88,6 @@ public final class Assert {
     }
 
     public static void notNeg(Number num) {
-        notNull(num);
         notNeg(num, null);
     }
 
@@ -99,16 +96,8 @@ public final class Assert {
         if (num.intValue() < 0) fail(mes);
     }
 
-    public static IllegalDataException fail() throws IllegalDataException {
-        throw fail(null);
-    }
-
     public static IllegalDataException fail(String mes) throws IllegalDataException {
         throw new IllegalDataException(mes);
-    }
-
-    public static NullPointerException npe() throws NullPointerException {
-        throw new NullPointerException(null);
     }
 
     public static NullPointerException npe(String mes) throws NullPointerException {
