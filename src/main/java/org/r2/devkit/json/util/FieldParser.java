@@ -10,6 +10,7 @@ import static org.r2.devkit.json.JSONToken.REVERSE_SOLIDUS;
  * 此protected接口用于解析不可再分解的JSON字段
  * 且本接口要求入参完全标准
  * 也就是说，从首个开始解析的字符起，每个字符都要有效，不支持JSON语法可忽略字符等
+ * 所有方法默认首字符是正确的
  *
  * @author ruan4261
  * @see JSONValueString
@@ -113,7 +114,7 @@ interface FieldParser {
      * 从str的下标offset开始，解析出一个JSONValueNumber对象
      *
      * [说明]
-     * 遇到 , 或 } 或 ] 字符时返回解析结果
+     * 遇到JSON语法可忽略字符或 , 或 } 或 ] 字符时返回解析结果
      *
      * [模式]
      * 仅支持十进制模式，允许科学计数法，详见{@link org.r2.devkit.json.field.JSONValueNumber}
@@ -123,8 +124,22 @@ interface FieldParser {
      * @throws JSONException 解析失败
      */
     static Holder<JSONValueNumber> p2Number(String str, int offset) {
-        // todo
-        return new Holder<>();
+        final int len = str.length();
+        final int start = offset;
+
+        for (; offset < len; offset++) {
+            char c = str.charAt(offset);
+            // end
+            if (isIgnorable(c) || c == COMMA || c == RBRACE || c == RBRACKET) {
+                JSONValueNumber number = new JSONValueNumber(str.substring(start, offset));
+                return new Holder<>(number, offset);
+            }
+
+            if (!(c >= '0' && c <= '9') && c != '.' && c != 'e' && c != 'E')
+                throw new JSONException("String cannot parse to number(off " + offset + ") : " + str);
+        }
+
+        throw new JSONException("String cannot parse to number(off " + offset + ") : " + str);
     }
 
     /**

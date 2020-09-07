@@ -1,5 +1,8 @@
 package org.r2.devkit.json;
 
+import org.r2.devkit.json.util.Holder;
+import org.r2.devkit.json.util.JSONParseCheck;
+import org.r2.devkit.json.util.JSONStringParser;
 import org.r2.devkit.util.Assert;
 
 import java.io.Serializable;
@@ -11,6 +14,12 @@ import java.io.Serializable;
  */
 public abstract class JSON implements JSONAware, Cloneable, Serializable {
     private static final long serialVersionUID = 1L;
+    /*
+     常用信息
+     JSON的基本信息以及本解析器的基本信息
+     */
+    public static final String MIME = "application/json";
+    public static final String VERSION = "0.0.1";
 
     @Override
     public String toString() {
@@ -26,18 +35,13 @@ public abstract class JSON implements JSONAware, Cloneable, Serializable {
      * @return JSON对象的实现：JSONObject或JSONArray, 其他情况会抛出异常。
      * @throws JSONException 字符串不规范，无法解析
      */
-    public static JSON parse(String json) {
-        Assert.notEmpty(json);
-        int len = json.length();
-        for (int i = 0; i < len; i++) {
-            char c = json.charAt(i);
-            if (JSONToken.isIgnorable(c)) continue;
-            if (JSONToken.LBRACE == c)
-                return JSONObject.parseObject(json);
-            if (JSONToken.LBRACKET == c)
-                return JSONArray.parseArray(json);
-            throw new JSONException("Cannot parse string : " + json);
-        }
-        throw new JSONException("Cannot parse string : " + json);
+    public static JSON parse(String str) {
+        Assert.notEmpty(str);
+
+        Holder<? extends JSON> holder = JSONStringParser.parse2JSON(str, 0);
+
+        // 判断字符串剩余部分是否可忽略，不可忽略则抛出异常
+        JSONParseCheck.ignore(str, holder.getOffset(), "String cannot parse to JSON : " + str);
+        return holder.getObject();
     }
 }

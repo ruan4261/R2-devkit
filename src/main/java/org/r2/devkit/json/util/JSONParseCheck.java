@@ -8,6 +8,9 @@ import org.r2.devkit.json.JSONToken;
  */
 public final class JSONParseCheck {
 
+    private JSONParseCheck() {
+    }
+
     /**
      * 判断在参数str中下标offset之后的内容是否可以忽视
      * 可忽视的字符见{@link JSONToken}

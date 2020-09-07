@@ -2,8 +2,8 @@ package org.r2.devkit.json;
 
 import static org.r2.devkit.json.JSONToken.*;
 
-import org.r2.devkit.json.custom.CustomSerializer;
-import org.r2.devkit.json.custom.CustomizableSerialize;
+import org.r2.devkit.serialize.CustomSerializer;
+import org.r2.devkit.json.custom.CustomizableSerialization;
 import org.r2.devkit.json.serialize.JSONSerializer;
 import org.r2.devkit.json.util.JSONParseCheck;
 import org.r2.devkit.json.util.JSONStringParser;
@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * @author ruan4261
  */
-public final class JSONObject extends JSON implements CustomizableSerialize, Map<String, Object> {
+public final class JSONObject extends JSON implements CustomizableSerialization, Map<String, Object> {
     private static final long serialVersionUID = 1L;
     private static final int DEFAULT_CAPACITY = 8;
     private final Map<String, Object> container;
@@ -35,22 +35,51 @@ public final class JSONObject extends JSON implements CustomizableSerialize, Map
         this.container = new HashMap<>(map);
     }
 
+    /**
+     * 完全替换当前对象序列化机制
+     */
     @Override
     public void setCustomSerializer(CustomSerializer customSerializer) {
         this.customSerializer = customSerializer;
     }
 
+    /**
+     * 完全替换当前对象序列化机制
+     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
+     */
     @Override
-    public void addCustomSerializer(CustomSerializer customSerializer) {
-        if (this.customSerializer == null)
-            this.setCustomSerializer(customSerializer);
-        else
-            this.customSerializer.putAll(customSerializer);
+    public void syncCustomSerializer(CustomSerializer customSerializer) {
+        this.setCustomSerializer(customSerializer);
+        this.container.values().forEach(o -> {
+            if (o instanceof CustomizableSerialization)
+                ((CustomizableSerialization) o).syncCustomSerializer(customSerializer);
+        });
     }
 
     @Override
     public CustomSerializer getCustomSerializer() {
         return this.customSerializer;
+    }
+
+    /**
+     * 删除当前对象序列化机制
+     */
+    @Override
+    public void removeCustomSerializer() {
+        this.customSerializer = null;
+    }
+
+    /**
+     * 删除当前对象序列化机制
+     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
+     */
+    @Override
+    public void removeAllCustomSerializer() {
+        this.removeCustomSerializer();
+        this.container.values().forEach(o -> {
+            if (o instanceof CustomizableSerialization)
+                ((CustomizableSerialization) o).removeAllCustomSerializer();
+        });
     }
 
     /**
@@ -63,6 +92,10 @@ public final class JSONObject extends JSON implements CustomizableSerialize, Map
         JSONParseCheck.ignore(str, holder.getOffset(), "String cannot parse to JSONObject : " + str);
 
         return holder.getObject();
+    }
+
+    public Map<String, Object> innerMap() {
+        return this.container;
     }
 
     /**
@@ -94,6 +127,11 @@ public final class JSONObject extends JSON implements CustomizableSerialize, Map
 
         builder.append(RBRACE);
         return builder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return this.toJSONString();
     }
 
     @Override
@@ -130,6 +168,7 @@ public final class JSONObject extends JSON implements CustomizableSerialize, Map
 
     @Override
     public Object put(String key, Object value) {
+        Assert.notNull(key, "key");
         return this.container.put(key, value);
     }
 

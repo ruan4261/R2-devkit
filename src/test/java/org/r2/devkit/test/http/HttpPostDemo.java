@@ -4,6 +4,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.r2.devkit.http.CommonHttpAPI;
+import org.r2.devkit.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -25,13 +26,12 @@ public class HttpPostDemo {
     private static void sendComment() throws IOException, URISyntaxException {
         PrintStream out = System.out;
         String uri = "";
-        Map<String, Object> params = new HashMap<>();
-        params.put("param", "");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", "tom");
 
         // 使用try-with-resource节省代码调用，不使用这种方式则可以选择CommonHttpAPI.closeClient
         try (CloseableHttpClient client = CommonHttpAPI.BUILD_DEFAULT_CLIENT()) {
-            // todo 移除了第三方JSON依赖，此示例暂时不可原生使用
-            HttpResponse response = CommonHttpAPI.doPostJson(client, uri, null, "");
+            HttpResponse response = CommonHttpAPI.doPostJson(client, uri, null, jsonObject.toJSONString());
             int code = CommonHttpAPI.getStatusCode(response);
             String mes = CommonHttpAPI.getReasonPhrase(response);
             long len = CommonHttpAPI.getContentLength(response);

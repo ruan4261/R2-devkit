@@ -1,7 +1,7 @@
 package org.r2.devkit.json;
 
-import org.r2.devkit.json.custom.CustomSerializer;
-import org.r2.devkit.json.custom.CustomizableSerialize;
+import org.r2.devkit.serialize.CustomSerializer;
+import org.r2.devkit.json.custom.CustomizableSerialization;
 import org.r2.devkit.json.serialize.JSONSerializer;
 import org.r2.devkit.json.util.JSONParseCheck;
 import org.r2.devkit.json.util.JSONStringParser;
@@ -15,7 +15,7 @@ import static org.r2.devkit.json.JSONToken.*;
 /**
  * @author ruan4261
  */
-public final class JSONArray extends JSON implements CustomizableSerialize, List<Object> {
+public final class JSONArray extends JSON implements CustomizableSerialization, List<Object> {
     private static final long serialVersionUID = 1L;
     private static final int DEFAULT_CAPACITY = 8;
     private final List<Object> container;
@@ -35,22 +35,51 @@ public final class JSONArray extends JSON implements CustomizableSerialize, List
         this.container = new ArrayList<>(list);
     }
 
+    /**
+     * 完全替换当前对象序列化机制
+     */
     @Override
     public void setCustomSerializer(CustomSerializer customSerializer) {
         this.customSerializer = customSerializer;
     }
 
+    /**
+     * 完全替换当前对象序列化机制
+     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
+     */
     @Override
-    public void addCustomSerializer(CustomSerializer customSerializer) {
-        if (this.customSerializer == null)
-            this.setCustomSerializer(customSerializer);
-        else
-            this.customSerializer.putAll(customSerializer);
+    public void syncCustomSerializer(CustomSerializer customSerializer) {
+        this.setCustomSerializer(customSerializer);
+        this.container.forEach(o -> {
+            if (o instanceof CustomizableSerialization)
+                ((CustomizableSerialization) o).syncCustomSerializer(customSerializer);
+        });
     }
 
     @Override
     public CustomSerializer getCustomSerializer() {
         return this.customSerializer;
+    }
+
+    /**
+     * 删除当前对象序列化机制
+     */
+    @Override
+    public void removeCustomSerializer() {
+        this.customSerializer = null;
+    }
+
+    /**
+     * 删除当前对象序列化机制
+     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
+     */
+    @Override
+    public void removeAllCustomSerializer() {
+        this.removeCustomSerializer();
+        this.container.forEach(o -> {
+            if (o instanceof CustomizableSerialization)
+                ((CustomizableSerialization) o).removeAllCustomSerializer();
+        });
     }
 
     /**
@@ -65,11 +94,9 @@ public final class JSONArray extends JSON implements CustomizableSerialize, List
         return holder.getObject();
     }
 
-    @Override
-    public String toString() {
-        return toJSONString();
+    public List<Object> innerList() {
+        return this.container;
     }
-
 
     /**
      * output json string
@@ -88,6 +115,11 @@ public final class JSONArray extends JSON implements CustomizableSerialize, List
 
         builder.append(RBRACKET);
         return builder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return this.toJSONString();
     }
 
     @Override
