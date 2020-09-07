@@ -126,6 +126,12 @@ interface FieldParser {
     static Holder<JSONValueNumber> p2Number(String str, int offset) {
         final int len = str.length();
         final int start = offset;
+        offset++;
+
+        // verify
+        boolean point = false;
+        boolean exponent = false;
+        boolean sign = false;
 
         for (; offset < len; offset++) {
             char c = str.charAt(offset);
@@ -133,9 +139,26 @@ interface FieldParser {
             if (isIgnorable(c) || c == COMMA || c == RBRACE || c == RBRACKET) {
                 JSONValueNumber number = new JSONValueNumber(str.substring(start, offset));
                 return new Holder<>(number, offset);
-            }
+            } else if (c == '.') {
+                if (point)
+                    throw new JSONException("String cannot parse to number(off " + offset + ") : " + str);
+                point = true;
+            } else if (c == 'e' || c == 'E') {
+                if (exponent)
+                    throw new JSONException("String cannot parse to number(off " + offset + ") : " + str);
+                exponent = point = true;
+            } else if (c == '-' || c == '+') {
+                if (sign)
+                    throw new JSONException("String cannot parse to number(off " + offset + ") : " + str);
+                if (!point || !exponent)
+                    throw new JSONException("String cannot parse to number(off " + offset + ") : " + str);
 
-            if (!(c >= '0' && c <= '9') && c != '.' && c != 'e' && c != 'E')
+                char prev = str.charAt(offset - 1);
+                if (prev != 'e' && prev != 'E')
+                    throw new JSONException("String cannot parse to number(off " + offset + ") : " + str);
+
+                sign = true;
+            } else if (!(c >= '0' && c <= '9'))
                 throw new JSONException("String cannot parse to number(off " + offset + ") : " + str);
         }
 

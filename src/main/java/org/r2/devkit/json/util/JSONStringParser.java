@@ -93,7 +93,7 @@ public final class JSONStringParser {
                         throw new JSONException("String cannot parse, miss colon(off " + offset + ") : " + str);
 
                     offset++;
-                    state = 3;
+                    state = 4;
                     continue loop;
                 case 4:
                     Holder<? extends JSON> jsonValue = parse2JSON(str, offset);
@@ -164,7 +164,7 @@ public final class JSONStringParser {
             }
 
             if (state == 1 || state == 3)
-                if (RBRACE == c)
+                if (RBRACKET == c)
                     // 解析结束
                     return new Holder<>(body, ++offset);
 
@@ -237,8 +237,8 @@ public final class JSONStringParser {
                 case LBRACKET:
                     return parse2JSONArray(str, offset);
                 default:
-                    // number 禁止前置0
-                    if (c == '-' || (c > '0' && c <= '9'))
+                    // number
+                    if (c == '-' || (c >= '0' && c <= '9'))
                         return p2Number(str, offset);
 
                     // 首字符不可用
