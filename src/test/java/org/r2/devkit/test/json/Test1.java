@@ -19,7 +19,7 @@ public class Test1 extends TestCore {
         jsonArray.add("date");
         jsonArray.add(LocalDateTime.now().plusYears(24));
         jsonObject.put("array", jsonArray);
-        jsonObject.syncCustomSerializer(customSerializer());
+        jsonObject.setCustomSerializer(customSerializer());
 
         print(jsonObject);
     }

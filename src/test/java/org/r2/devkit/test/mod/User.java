@@ -8,4 +8,11 @@ public class User extends People implements DateTimeAPI {
     public int code;
     public String address;
 
+    public User() {
+    }
+
+    public User(int code, String address) {
+        this.code = code;
+        this.address = address;
+    }
 }

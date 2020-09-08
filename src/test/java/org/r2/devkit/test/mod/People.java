@@ -8,4 +8,11 @@ public class People implements Cloneable, Serializable {
     public String name;
     public int age;
 
+    public People() {
+    }
+
+    public People(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
 }

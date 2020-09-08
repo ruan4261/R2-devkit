@@ -15,6 +15,7 @@ public final class ReflectUtil {
     /**
      * 获取类的所有实现的接口以及超类
      * 包括更上层的超类和他们实现的接口
+     * ps:返回的集合包括参数自身
      */
     public static Set<Class> getAllSuper(Class clazz) {
         Set<Class> classes = new HashSet<>();

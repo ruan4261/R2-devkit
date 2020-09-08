@@ -10,8 +10,6 @@ import org.r2.devkit.util.Assert;
 
 import java.util.*;
 
-import static org.r2.devkit.json.JSONToken.*;
-
 /**
  * @author ruan4261
  */
@@ -43,19 +41,6 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
         this.customSerializer = customSerializer;
     }
 
-    /**
-     * 完全替换当前对象序列化机制
-     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
-     */
-    @Override
-    public void syncCustomSerializer(CustomSerializer customSerializer) {
-        this.setCustomSerializer(customSerializer);
-        this.container.forEach(o -> {
-            if (o instanceof CustomizableSerialization)
-                ((CustomizableSerialization) o).syncCustomSerializer(customSerializer);
-        });
-    }
-
     @Override
     public CustomSerializer getCustomSerializer() {
         return this.customSerializer;
@@ -67,19 +52,6 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
     @Override
     public void removeCustomSerializer() {
         this.customSerializer = null;
-    }
-
-    /**
-     * 删除当前对象序列化机制
-     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
-     */
-    @Override
-    public void removeAllCustomSerializer() {
-        this.removeCustomSerializer();
-        this.container.forEach(o -> {
-            if (o instanceof CustomizableSerialization)
-                ((CustomizableSerialization) o).removeAllCustomSerializer();
-        });
     }
 
     /**
@@ -103,18 +75,7 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
      */
     @Override
     public String toJSONString() {
-        final StringBuilder builder = new StringBuilder(String.valueOf(LBRACKET));
-        container.forEach(
-                object -> builder.append(JSONSerializer.serializer(object, this.customSerializer)).append(COMMA)
-        );
-
-        // delete last comma
-        int last = builder.length() - 1;
-        if (builder.charAt(last) == COMMA)
-            builder.deleteCharAt(last);
-
-        builder.append(RBRACKET);
-        return builder.toString();
+        return JSONSerializer.collection2JSONString(this, this.customSerializer);
     }
 
     @Override

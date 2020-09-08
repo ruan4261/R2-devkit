@@ -24,7 +24,7 @@ public class Demo2 extends TestCore {
         customSerializer.register(User.class, 101, u -> "address=" + u.address + ";code=" + u.code);
         customSerializer.register(Serializable.class, 20, o -> "不序了，不序了");
 
-        array.syncCustomSerializer(customSerializer);
+        array.setCustomSerializer(customSerializer);
         print(array.toJSONString());
     }
 

@@ -1,7 +1,5 @@
 package org.r2.devkit.json;
 
-import static org.r2.devkit.json.JSONToken.*;
-
 import org.r2.devkit.serialize.CustomSerializer;
 import org.r2.devkit.json.custom.CustomizableSerialization;
 import org.r2.devkit.json.serialize.JSONSerializer;
@@ -43,19 +41,6 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
         this.customSerializer = customSerializer;
     }
 
-    /**
-     * 完全替换当前对象序列化机制
-     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
-     */
-    @Override
-    public void syncCustomSerializer(CustomSerializer customSerializer) {
-        this.setCustomSerializer(customSerializer);
-        this.container.values().forEach(o -> {
-            if (o instanceof CustomizableSerialization)
-                ((CustomizableSerialization) o).syncCustomSerializer(customSerializer);
-        });
-    }
-
     @Override
     public CustomSerializer getCustomSerializer() {
         return this.customSerializer;
@@ -67,19 +52,6 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
     @Override
     public void removeCustomSerializer() {
         this.customSerializer = null;
-    }
-
-    /**
-     * 删除当前对象序列化机制
-     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
-     */
-    @Override
-    public void removeAllCustomSerializer() {
-        this.removeCustomSerializer();
-        this.container.values().forEach(o -> {
-            if (o instanceof CustomizableSerialization)
-                ((CustomizableSerialization) o).removeAllCustomSerializer();
-        });
     }
 
     /**
@@ -98,35 +70,16 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
         return this.container;
     }
 
+    public void fillDomainModel(Object object, String key) {
+        
+    }
+
     /**
      * output json string
      */
     @Override
     public String toJSONString() {
-        final StringBuilder builder = new StringBuilder(String.valueOf(LBRACE));
-
-        // body
-        container.forEach((k, v) -> {
-            // key
-            builder.append(DOUBLE_QUOT).append(k).append(DOUBLE_QUOT);
-
-            // :
-            builder.append(COLON);
-
-            // value
-            builder.append(JSONSerializer.serializer(v, this.customSerializer));
-
-            // ,
-            builder.append(COMMA);
-        });
-
-        // delete last comma
-        int last = builder.length() - 1;
-        if (builder.charAt(last) == COMMA)
-            builder.deleteCharAt(last);
-
-        builder.append(RBRACE);
-        return builder.toString();
+        return JSONSerializer.map2JSONString(this, this.customSerializer);
     }
 
     @Override

@@ -11,12 +11,7 @@ public interface CustomizableSerialization {
 
     /**
      * 完全替换当前对象序列化机制
-     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
-     */
-    void syncCustomSerializer(CustomSerializer customSerializer);
-
-    /**
-     * 完全替换当前对象序列化机制
+     * 其框架内如果拥有实现CustomizableSerialization的子元素，也遵循此序列化机制
      */
     void setCustomSerializer(CustomSerializer customSerializer);
 
@@ -26,11 +21,4 @@ public interface CustomizableSerialization {
      * 删除当前对象序列化机制
      */
     void removeCustomSerializer();
-
-    /**
-     * 删除当前对象序列化机制
-     * 并且其内部所继承的CustomizableSerialization的元素都应该被同步
-     */
-    void removeAllCustomSerializer();
-
 }
