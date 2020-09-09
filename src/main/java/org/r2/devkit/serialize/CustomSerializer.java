@@ -2,7 +2,7 @@ package org.r2.devkit.serialize;
 
 import org.r2.devkit.exception.runtime.IllegalDataException;
 import org.r2.devkit.exception.runtime.UnsupportedClassException;
-import org.r2.devkit.reflect.ReflectUtil;
+import org.r2.devkit.util.ReflectUtil;
 import org.r2.devkit.util.Assert;
 
 import java.io.Serializable;

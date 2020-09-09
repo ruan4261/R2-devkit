@@ -1,4 +1,4 @@
-package org.r2.devkit.reflect;
+package org.r2.devkit.util;
 
 import java.util.Arrays;
 import java.util.HashSet;

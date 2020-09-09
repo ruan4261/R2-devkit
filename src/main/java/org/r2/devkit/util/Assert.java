@@ -67,7 +67,7 @@ public final class Assert {
 
         if (len == -1) return;
         if (offset < 0 || offset >= len)
-            fail("Array length is " + len + ", but offset is " + offset);
+            fail("Series length is " + len + ", but offset is " + offset);
     }
 
     public static void notNull(Object arg, String mes) {
@@ -94,6 +94,23 @@ public final class Assert {
     public static void notNeg(Number num, String mes) {
         notNull(num, mes);
         if (num.intValue() < 0) fail(mes);
+    }
+
+    public static void judge(Judgement judgement) {
+        if (judgement.judge())
+            fail(null);
+    }
+
+    public static void judge(Judgement judgement, String mes) {
+        if (judgement.judge())
+            fail(mes);
+    }
+
+    @FunctionalInterface
+    public interface Judgement {
+
+        boolean judge();
+
     }
 
     public static IllegalDataException fail(String mes) throws IllegalDataException {

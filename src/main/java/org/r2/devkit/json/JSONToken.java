@@ -101,4 +101,47 @@ public final class JSONToken {
                 return false;
         }
     }
+
+    /**
+     * 是否是转义字符
+     * 例如 \r \n \b \t 等无法观察到的字符
+     */
+    public static boolean isEscapeChar(char c) {
+        switch (c) {
+            case QUOT:
+            case DOUBLE_QUOT:
+            case LINE_FEED:
+            case CARRIAGE_RETURN:
+            case TAB:
+            case FORM_FEED:
+            case BACKSPACE:
+            case REVERSE_SOLIDUS:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static char[] escape(char c) {
+        switch (c) {
+            case QUOT:
+                return new char[]{'\\', '\''};
+            case DOUBLE_QUOT:
+                return new char[]{'\\', '\"'};
+            case LINE_FEED:
+                return new char[]{'\\', 'n'};
+            case CARRIAGE_RETURN:
+                return new char[]{'\\', 'r'};
+            case TAB:
+                return new char[]{'\\', 't'};
+            case FORM_FEED:
+                return new char[]{'\\', 'f'};
+            case BACKSPACE:
+                return new char[]{'\\', 'b'};
+            case REVERSE_SOLIDUS:
+                return new char[]{'\\', '\\'};
+            default:
+                return new char[]{c};
+        }
+    }
 }

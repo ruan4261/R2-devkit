@@ -34,7 +34,7 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
     }
 
     /**
-     * 完全替换当前对象序列化机制
+     * 完全替换当前对象序列化机制1
      */
     @Override
     public void setCustomSerializer(CustomSerializer customSerializer) {
@@ -68,10 +68,6 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
 
     public Map<String, Object> innerMap() {
         return this.container;
-    }
-
-    public void fillDomainModel(Object object, String key) {
-        
     }
 
     /**

@@ -1,18 +1,14 @@
 package org.r2.devkit.json.serialize;
 
+import org.r2.devkit.CharLinkedSequence;
 import org.r2.devkit.json.JSON;
-import org.r2.devkit.json.JSONArray;
 import org.r2.devkit.json.JSONObject;
-import org.r2.devkit.json.util.Holder;
 import org.r2.devkit.serialize.CustomSerializer;
 import org.r2.devkit.json.field.JSONValueNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.TypeVariable;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.r2.devkit.json.JSONToken.*;
@@ -46,7 +42,7 @@ public final class JSONSerializer {
             return JSONValueNull.getInstance().toString();
         // 2
         if (serializer != null && serializer.isExistClassSerializer(object))
-            return withQuotation(serializer.classSerializer(object).serialize(object));
+            return escapeAndQuot(serializer.classSerializer(object).serialize(object));
         // 3
         if (object instanceof Map)
             return map2JSONString((Map) object, serializer);
@@ -60,10 +56,10 @@ public final class JSONSerializer {
             return object.toString();
         // 6
         if (object instanceof CharSequence)
-            return withQuotation(object.toString());
+            return escapeAndQuot(object.toString());
         // 7
         if (serializer != null && serializer.hasCustomizer(object))
-            return withQuotation(serializer.serialize(object));
+            return escapeAndQuot(serializer.serialize(object));
         // 8
         return reflect2JSONString(object);
     }
@@ -82,6 +78,9 @@ public final class JSONSerializer {
 
             String name = field.getName();
             try {
+                if (!field.isAccessible())
+                    field.setAccessible(true);
+
                 jsonObject.put(name, field.get(object));
             } catch (IllegalAccessException ignore) {
                 jsonObject.put(name, null);
@@ -91,8 +90,20 @@ public final class JSONSerializer {
         return jsonObject.toJSONString();
     }
 
-    public static String withQuotation(String str) {
-        return DOUBLE_QUOT + str + DOUBLE_QUOT;
+    /**
+     * 生成一个JSONValueString字段
+     * 此方法会根据JSON标准对字符串内的字符进行转义
+     * 并且在字符串边界加上双引号
+     */
+    public static String escapeAndQuot(String str) {
+        CharLinkedSequence sequence = new CharLinkedSequence(str);
+        sequence.replace(c -> {
+            if (isEscapeChar(c))
+                return escape(c);
+            else
+                return null;
+        });
+        return DOUBLE_QUOT + sequence.toString() + DOUBLE_QUOT;
     }
 
     @SuppressWarnings("unchecked")
