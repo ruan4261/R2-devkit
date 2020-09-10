@@ -61,6 +61,7 @@ public class CharLinkedSequence implements Appendable {
         while (curr.next != null) {
             curr = curr.next;
             char[] newp = editor.edit(curr.character);
+
             if (newp == null) {
                 // do nothing
             } else if (newp.length == 0) {
@@ -69,7 +70,8 @@ public class CharLinkedSequence implements Appendable {
                 this.length--;
             } else if (newp.length == 1) {
                 curr.character = newp[0];
-            } else {// newp.length > 0
+            } else {
+                // newp.length > 1
                 this.length += newp.length - 1;
                 curr.character = newp[0];
 

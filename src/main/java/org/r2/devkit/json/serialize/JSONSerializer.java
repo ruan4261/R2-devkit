@@ -114,13 +114,13 @@ public final class JSONSerializer {
         // body
         map.forEach((k, v) -> {
             // key
-            builder.append(DOUBLE_QUOT).append(k.toString()).append(DOUBLE_QUOT);
+            builder.append(escapeAndQuot(k.toString()));
 
             // :
             builder.append(COLON);
 
             // value
-            builder.append(JSONSerializer.serializer(v, serializer));
+            builder.append(serializer(v, serializer));
 
             // ,
             builder.append(COMMA);
@@ -141,7 +141,7 @@ public final class JSONSerializer {
         builder.append(LBRACKET);
 
         collection.forEach(
-                object -> builder.append(JSONSerializer.serializer(object, serializer)).append(COMMA)
+                object -> builder.append(serializer(object, serializer)).append(COMMA)
         );
 
         // delete last comma

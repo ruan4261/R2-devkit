@@ -3,7 +3,7 @@ package org.r2.devkit.util;
 import org.r2.devkit.exception.runtime.IllegalDataException;
 
 import java.lang.reflect.Array;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -25,7 +25,7 @@ public final class Assert {
      * 支持判断如下类型
      * 1.CharSequence
      * 2.Map
-     * 3.List
+     * 3.Collection
      * 4.Native Array
      * 不属于以上类型且不为Null时不做判断
      */
@@ -35,8 +35,8 @@ public final class Assert {
             if (((CharSequence) arg).length() == 0) fail(mes);
         } else if (arg instanceof Map) {
             if (((Map) arg).isEmpty()) fail(mes);
-        } else if (arg instanceof List) {
-            if (((List) arg).isEmpty()) fail(mes);
+        } else if (arg instanceof Collection) {
+            if (((Collection) arg).isEmpty()) fail(mes);
         } else if (arg.getClass().isArray()) {
             int len = Array.getLength(arg);
             if (len == 0) fail(mes);
@@ -48,7 +48,7 @@ public final class Assert {
      * 支持判断如下类型
      * 1.CharSequence
      * 2.Map
-     * 3.List
+     * 3.Collection
      * 4.Native Array
      * 不属于以上类型且不为Null时不做判断
      */
@@ -59,8 +59,8 @@ public final class Assert {
             len = ((CharSequence) arg).length();
         } else if (arg instanceof Map) {
             len = ((Map) arg).size();
-        } else if (arg instanceof List) {
-            len = ((List) arg).size();
+        } else if (arg instanceof Collection) {
+            len = ((Collection) arg).size();
         } else if (arg.getClass().isArray()) {
             len = Array.getLength(arg);
         }

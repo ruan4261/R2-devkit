@@ -75,7 +75,7 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
      */
     @Override
     public String toJSONString() {
-        return JSONSerializer.collection2JSONString(this, this.customSerializer);
+        return JSONSerializer.serializer(this, this.customSerializer);
     }
 
     @Override

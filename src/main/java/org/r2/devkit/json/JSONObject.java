@@ -75,7 +75,7 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
      */
     @Override
     public String toJSONString() {
-        return JSONSerializer.map2JSONString(this, this.customSerializer);
+        return JSONSerializer.serializer(this, this.customSerializer);
     }
 
     @Override
