@@ -5,6 +5,7 @@ import org.r2.devkit.json.JSON;
 import org.r2.devkit.json.JSONObject;
 import org.r2.devkit.serialize.CustomSerializer;
 import org.r2.devkit.json.field.JSONValueNull;
+import org.r2.devkit.util.BeanUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -68,26 +69,7 @@ public final class JSONSerializer {
      * 通过反射将贫血模型转换为JSONObject再输出字符串
      */
     public static String reflect2JSONString(Object object) {
-        Class clazz = object.getClass();
-        Field[] fields = clazz.getDeclaredFields();
-        JSONObject jsonObject = new JSONObject();
-
-        for (Field field : fields) {
-            int modifiers = field.getModifiers();
-            if (Modifier.isStatic(modifiers) || Modifier.isTransient(modifiers)) continue;
-
-            String name = field.getName();
-            try {
-                if (!field.isAccessible())
-                    field.setAccessible(true);
-
-                jsonObject.put(name, field.get(object));
-            } catch (IllegalAccessException ignore) {
-                jsonObject.put(name, null);
-            }
-        }
-
-        return jsonObject.toJSONString();
+        return new JSONObject(BeanUtil.object2Map(object, false, false)).toJSONString();
     }
 
     /**

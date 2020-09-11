@@ -4,7 +4,7 @@ import org.r2.devkit.json.util.Holder;
 import org.r2.devkit.json.util.JSONParseCheck;
 import org.r2.devkit.json.util.JSONStringParser;
 import org.r2.devkit.util.Assert;
-import org.r2.devkit.util.DomainConverter;
+import org.r2.devkit.util.BeanUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public abstract class JSON implements JSONAware, Cloneable, Serializable {
     public static <T> T parse(String str, Class<T> clazz) {
         JSON json = parse(str);
         if (json instanceof JSONObject) {
-            return DomainConverter.map2Object((JSONObject) json, clazz);
+            return BeanUtil.map2Object((JSONObject) json, clazz);
         } else throw new JSONException(json.getClass().toString() + " cannot convert to " + clazz.toString());
     }
 
@@ -58,7 +58,7 @@ public abstract class JSON implements JSONAware, Cloneable, Serializable {
             final List<T> res = new ArrayList<>(arr.size());
             arr.forEach(object -> {
                 if (object instanceof JSONObject)
-                    res.add(DomainConverter.map2Object((JSONObject) object, clazz));
+                    res.add(BeanUtil.map2Object((JSONObject) object, clazz));
                 // do nothing
             });
             return res;

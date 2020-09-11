@@ -30,7 +30,7 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
 
     public JSONObject(Map<String, Object> map) {
         Assert.notNull(map, "map");
-        this.container = new HashMap<>(map);
+        this.container = map;
     }
 
     /**
@@ -85,7 +85,7 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
 
     @Override
     public Object clone() {
-        return new JSONObject(this.container);
+        return new JSONObject(new HashMap<>(this.container));
     }
 
     /* Override */

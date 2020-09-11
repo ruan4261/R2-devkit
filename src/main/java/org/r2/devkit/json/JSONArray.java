@@ -28,9 +28,9 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
         this.container = new ArrayList<>(initialCapacity);
     }
 
-    public JSONArray(Collection<Object> list) {
+    public JSONArray(List<Object> list) {
         Assert.notNull(list, "list");
-        this.container = new ArrayList<>(list);
+        this.container = list;
     }
 
     /**
@@ -85,7 +85,7 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
 
     @Override
     public Object clone() {
-        return new JSONArray(this.container);
+        return new JSONArray(new ArrayList<>(this.container));
     }
 
     /* List Override */
