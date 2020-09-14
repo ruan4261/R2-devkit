@@ -1,5 +1,6 @@
 package org.r2.devkit.json;
 
+import org.r2.devkit.exception.BeanException;
 import org.r2.devkit.json.util.Holder;
 import org.r2.devkit.json.util.JSONParseCheck;
 import org.r2.devkit.json.util.JSONStringParser;
@@ -44,22 +45,38 @@ public abstract class JSON implements JSONAware, Cloneable, Serializable {
         return holder.getObject();
     }
 
-    public static <T> T parse(String str, Class<T> clazz) {
+
+    /**
+     * 解析json字符串
+     * 输出为clazz类型实例
+     *
+     * @throws BeanException 无法成功构造目标实例
+     */
+    public static <T> T parse(String str, Class<T> clazz) throws BeanException {
         JSON json = parse(str);
         if (json instanceof JSONObject) {
             return BeanUtil.map2Object((JSONObject) json, clazz);
         } else throw new JSONException(json.getClass().toString() + " cannot convert to " + clazz.toString());
     }
 
+    /**
+     * 解析json字符串
+     * 输出为clazz类型实例数组
+     */
     public static <T> List<T> parseArray(String str, Class<T> clazz) {
         JSON json = parse(str);
         if (json instanceof JSONArray) {
             JSONArray arr = (JSONArray) json;
             final List<T> res = new ArrayList<>(arr.size());
             arr.forEach(object -> {
-                if (object instanceof JSONObject)
-                    res.add(BeanUtil.map2Object((JSONObject) object, clazz));
+                if (object instanceof JSONObject) {
+                    try {
+                        res.add(BeanUtil.map2Object((JSONObject) object, clazz));
+                    } catch (BeanException ignore) {
+                    }
+                }
                 // do nothing
+                // todo 考虑clazz为基类或数组集合类的情况
             });
             return res;
         } else throw new JSONException(json.getClass().toString() + " cannot convert to " + clazz.toString());

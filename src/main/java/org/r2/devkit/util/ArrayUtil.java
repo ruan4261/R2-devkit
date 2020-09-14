@@ -14,10 +14,11 @@ public final class ArrayUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T[] concat(Class<T> clazz, T[] a1, T[] a2) {
+    public static <T> T[] concat(T[] a1, T[] a2) {
         Assert.notNull(a1);
         Assert.notNull(a2);
-        T[] arr = (T[]) Array.newInstance(clazz, a1.length + a2.length);
+        Class type = a1.getClass().getComponentType();
+        T[] arr = (T[]) Array.newInstance(type, a1.length + a2.length);
         System.arraycopy(a1, 0, arr, 0, a1.length);
         System.arraycopy(a2, 0, arr, a1.length, a2.length);
         return arr;
@@ -96,9 +97,9 @@ public final class ArrayUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T[] delRepeat(Class<T> clazz, T[] a) {
+    public static <T> T[] delRepeat(T[] a) {
         Assert.notNull(a);
         Set<T> set = new HashSet<>(Arrays.asList(a));
-        return set.toArray((T[]) Array.newInstance(clazz, 0));
+        return set.toArray((T[]) Array.newInstance(a.getClass().getComponentType(), 0));
     }
 }

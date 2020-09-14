@@ -30,9 +30,6 @@ import org.r2.devkit.util.BeanUtil;
 public class Demo2 extends TestCore {
 
     public static void main(String[] args) {
-        System.out.println(BeanUtil.object2Map(new User(1, "23"), true, true));
-        System.out.println(BeanUtil.object2Map(new User(1, "23"), true, false));
-        System.out.println(BeanUtil.object2Map(new User(1, "23"), false, true));
     }
 
 }

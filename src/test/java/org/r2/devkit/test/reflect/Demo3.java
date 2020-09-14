@@ -21,10 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/**
- * @license MIT
- * @author ruan4261
- * @version 0.0.1
- * @since 2020
- */
-package org.r2.devkit;
+package org.r2.devkit.test.reflect;
+
+import org.r2.devkit.test.TestCore;
+import org.r2.devkit.test.mod.User;
+import org.r2.devkit.util.BeanUtil;
+
+public class Demo3 extends TestCore {
+
+    public static void main(String[] args) {
+        print(BeanUtil.queryFields(User.class, (10)));
+    }
+
+}

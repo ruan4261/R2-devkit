@@ -1,6 +1,7 @@
 package org.r2.devkit.test;
 
 import java.io.PrintStream;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public abstract class TestCore {
@@ -24,7 +25,10 @@ public abstract class TestCore {
     }
 
     public static void print(Object obj) {
-        print(obj.toString());
+        if (obj.getClass().isArray())
+            print(Arrays.toString((Object[]) obj));
+        else
+            print(obj.toString());
     }
 
     public static void printf(String format, Object... args) {

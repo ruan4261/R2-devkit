@@ -7,8 +7,6 @@ import org.r2.devkit.serialize.CustomSerializer;
 import org.r2.devkit.json.field.JSONValueNull;
 import org.r2.devkit.util.BeanUtil;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
 
@@ -67,9 +65,10 @@ public final class JSONSerializer {
 
     /**
      * 通过反射将贫血模型转换为JSONObject再输出字符串
+     * static, transient 关键字修饰的字段将被过滤
      */
     public static String reflect2JSONString(Object object) {
-        return new JSONObject(BeanUtil.object2Map(object, false, false)).toJSONString();
+        return new JSONObject(BeanUtil.object2Map(object, (8 + 128))).toJSONString();
     }
 
     /**
