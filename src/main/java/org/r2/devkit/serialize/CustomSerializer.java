@@ -7,6 +7,7 @@ import org.r2.devkit.util.Assert;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 可自定义的多类型的序列化方案
@@ -16,25 +17,26 @@ import java.util.*;
  * 如果其超类和实现接口都有序列化器（也就是寻找到多个序列化器），其将会根据优先级进行选择
  * 如果一个类的序列化器的优先级(level)小于0，那么它将不会允许该类以外的任何类实例使用该序列化器
  * 在注册时，如果不录入level，level默认为-1，只允许注册它的类调用，子类无法调用
+ * 请勿将优先级设为MAX_INT，否则其子类序列化器就算存在也可能不被选择
  *
  * @author ruan4261
  */
 public final class CustomSerializer implements Cloneable, Serializable {
-    private static final long serialVersionUID = 2881383912572573956L;
+    private static final long serialVersionUID = 7156136235068395265L;
     private static final int DEFAULT_CAPACITY = 8;
-    private final Map<Class, Bucket> customize;
+    private final ConcurrentHashMap<Class, Bucket> customize;
 
     public CustomSerializer() {
-        this.customize = new HashMap<>(DEFAULT_CAPACITY);
+        this.customize = new ConcurrentHashMap<>(DEFAULT_CAPACITY);
     }
 
     public CustomSerializer(int initialCapacity) {
-        this.customize = new HashMap<>(initialCapacity);
+        this.customize = new ConcurrentHashMap<>(initialCapacity);
     }
 
     public CustomSerializer(Map<Class, Bucket> map) {
         Assert.notNull(map);
-        this.customize = new HashMap<>(map);
+        this.customize = new ConcurrentHashMap<>(map);
     }
 
     /**
@@ -128,6 +130,9 @@ public final class CustomSerializer implements Cloneable, Serializable {
         return this.isExistClassSerializer(object.getClass());
     }
 
+    /**
+     * 判断一个类有没有自定义序列化机制，其继承的序列化机制不算在内
+     */
     public boolean isExistClassSerializer(Class clazz) {
         return this.customize.containsKey(clazz);
     }

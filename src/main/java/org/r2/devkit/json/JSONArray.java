@@ -33,6 +33,23 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
         this.container = list;
     }
 
+    public <T> JSONArray(T[] a) {
+        Assert.notNull(a);
+        this.container = new ArrayList<>(Arrays.asList(a));
+    }
+
+    /**
+     * newContainer为true的情况下，将构造一个新的List用于内部数据存储
+     * newContainer为false的情况下，该构造等同于普通的list构造
+     */
+    public JSONArray(List<Object> list, boolean newContainer) {
+        Assert.notNull(list, "list");
+        if (newContainer)
+            this.container = new ArrayList<>(list);
+        else
+            this.container = list;
+    }
+
     /**
      * 完全替换当前对象序列化机制
      */

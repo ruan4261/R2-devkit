@@ -34,6 +34,18 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
     }
 
     /**
+     * newContainer为true的情况下，将构造一个新的Map用于内部数据存储
+     * newContainer为false的情况下，该构造等同于普通的Map构造
+     */
+    public JSONObject(Map<String, Object> map, boolean newContainer) {
+        Assert.notNull(map, "map");
+        if (newContainer)
+            this.container = new HashMap<>(map);
+        else
+            this.container = map;
+    }
+
+    /**
      * 完全替换当前对象序列化机制1
      */
     @Override

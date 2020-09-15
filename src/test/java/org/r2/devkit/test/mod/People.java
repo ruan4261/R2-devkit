@@ -15,4 +15,10 @@ public class People implements Cloneable, Serializable {
         this.name = name;
         this.age = age;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
 }

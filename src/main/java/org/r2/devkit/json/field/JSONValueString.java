@@ -1,6 +1,7 @@
 package org.r2.devkit.json.field;
 
 import org.r2.devkit.json.JSON;
+import org.r2.devkit.util.Assert;
 
 import static org.r2.devkit.json.JSONToken.*;
 
@@ -11,7 +12,7 @@ import static org.r2.devkit.json.JSONToken.*;
  *
  * @author ruan4261
  */
-public final class JSONValueString extends JSON {
+public final class JSONValueString extends JSON implements CharSequence {
     private static final long serialVersionUID = 1L;
     private String container;
 
@@ -44,5 +45,23 @@ public final class JSONValueString extends JSON {
     @Override
     public Object clone() {
         return new JSONValueString(this.container);
+    }
+
+    @Override
+    public int length() {
+        if (container == null) return 0;
+        return this.container.length();
+    }
+
+    @Override
+    public char charAt(int index) {
+        Assert.notNull(this.container);
+        return this.container.charAt(index);
+    }
+
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        Assert.notNull(this.container);
+        return this.container.subSequence(start, end);
     }
 }

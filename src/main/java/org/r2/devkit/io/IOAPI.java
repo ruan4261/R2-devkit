@@ -3,6 +3,7 @@ package org.r2.devkit.io;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 
 /**
  * IO流无状态API，常用于向本地输出文件流.
@@ -125,4 +126,22 @@ public interface IOAPI {
         }
     }
 
+    /**
+     * 通过字符流读取本地文件
+     *
+     * @param path    路径
+     * @param charset 字符集，可为null，默认为平台字符集
+     */
+    static String readLocalFileText(String path, Charset charset) throws IOException {
+        if (charset == null) charset = Charset.defaultCharset();
+        try (Reader input = new InputStreamReader(new FileInputStream(path), charset)) {
+            StringBuilder builder = new StringBuilder(1024);
+            int read;
+            char[] data = new char[1024];
+            while ((read = input.read(data)) != -1) {
+                builder.append(data, 0, read);
+            }
+            return builder.toString();
+        }
+    }
 }

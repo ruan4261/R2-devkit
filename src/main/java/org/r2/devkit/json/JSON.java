@@ -54,9 +54,7 @@ public abstract class JSON implements JSONAware, Cloneable, Serializable {
      */
     public static <T> T parse(String str, Class<T> clazz) throws BeanException {
         JSON json = parse(str);
-        if (json instanceof JSONObject) {
-            return BeanUtil.map2Object((JSONObject) json, clazz);
-        } else throw new JSONException(json.getClass().toString() + " cannot convert to " + clazz.toString());
+        return BeanUtil.convert(clazz, json);
     }
 
     /**
@@ -69,16 +67,26 @@ public abstract class JSON implements JSONAware, Cloneable, Serializable {
             JSONArray arr = (JSONArray) json;
             final List<T> res = new ArrayList<>(arr.size());
             arr.forEach(object -> {
-                if (object instanceof JSONObject) {
-                    try {
-                        res.add(BeanUtil.map2Object((JSONObject) object, clazz));
-                    } catch (BeanException ignore) {
-                    }
+                try {
+                    res.add(BeanUtil.convert(clazz, object));
+                } catch (BeanException ignore) {
                 }
-                // do nothing
-                // todo 考虑clazz为基类或数组集合类的情况
             });
             return res;
         } else throw new JSONException(json.getClass().toString() + " cannot convert to " + clazz.toString());
     }
+
+    @SuppressWarnings("unchecked")
+    public static <T> JSON toJSON(Object object) {
+        if (object instanceof JSON) {
+            return (JSON) object;
+        } else if (object.getClass().isArray()) {
+            return new JSONArray((T[]) object);
+        } else if (object instanceof List) {
+            return new JSONArray((List<Object>) object, true);
+        } else {
+            return new JSONObject(BeanUtil.object2Map(object, 0));
+        }
+    }
+
 }
