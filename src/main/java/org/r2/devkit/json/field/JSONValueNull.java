@@ -30,6 +30,11 @@ public final class JSONValueNull extends JSON {
         return NULL;
     }
 
+    @Override
+    public String toString() {
+        return this.toJSONString();
+    }
+
     /**
      * 本类禁止克隆
      */

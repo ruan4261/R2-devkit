@@ -126,6 +126,10 @@ public interface IOAPI {
         }
     }
 
+    static String readLocalFileText(String path) throws IOException {
+        return readLocalFileText(path, null);
+    }
+
     /**
      * 通过字符流读取本地文件
      *
@@ -134,7 +138,7 @@ public interface IOAPI {
      */
     static String readLocalFileText(String path, Charset charset) throws IOException {
         if (charset == null) charset = Charset.defaultCharset();
-        try (Reader input = new InputStreamReader(new FileInputStream(path), charset)) {
+        try (Reader input = new BufferedReader(new InputStreamReader(new FileInputStream(path), charset))) {
             StringBuilder builder = new StringBuilder(1024);
             int read;
             char[] data = new char[1024];
@@ -142,6 +146,35 @@ public interface IOAPI {
                 builder.append(data, 0, read);
             }
             return builder.toString();
+        }
+    }
+
+    static void writeLocalFileText(String path, String data) throws IOException {
+        writeLocalFileText(path, data, null, false);
+    }
+
+    static void writeLocalFileText(String path, String data, Charset charset) throws IOException {
+        writeLocalFileText(path, data, charset, false);
+    }
+
+    static void writeLocalFileText(String path, String data, boolean append) throws IOException {
+        writeLocalFileText(path, data, null, append);
+    }
+
+    /**
+     * 通过字符流将数据写入本地文本文件
+     *
+     * @param path    路径
+     * @param data    写入内容
+     * @param charset 字符集，可为null，默认为平台字符集
+     * @param append  是否追加（是：追加；否：覆盖）
+     * @throws IOException
+     */
+    static void writeLocalFileText(String path, String data, Charset charset, boolean append) throws IOException {
+        if (charset == null) charset = Charset.defaultCharset();
+        try (Writer output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, append), charset))) {
+            output.write(data);
+            output.flush();
         }
     }
 }

@@ -20,8 +20,27 @@ public abstract class TestCore {
             out.println(key + " -> " + value);
     }
 
+    public static void errPrint(String key, Object value) {
+        Class klass = value.getClass();
+        if (klass.isArray())
+            err.println(key + " -> " + Arrays.toString((Object[]) value));
+        else
+            err.println(key + " -> " + value);
+    }
+
     public static void print(String val) {
         out.println(val);
+    }
+
+    public static void errPrint(String val) {
+        err.println(val);
+    }
+
+    public static void errPrint(Object obj) {
+        if (obj.getClass().isArray())
+            errPrint(Arrays.toString((Object[]) obj));
+        else
+            errPrint(obj.toString());
     }
 
     public static void print(Object obj) {

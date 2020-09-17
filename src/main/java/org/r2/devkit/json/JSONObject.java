@@ -87,7 +87,7 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
      */
     @Override
     public String toJSONString() {
-        return JSONSerializer.serializer(this, this.customSerializer);
+        return JSONSerializer.map2JSONString(this, this.customSerializer);
     }
 
     @Override
@@ -98,6 +98,19 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
     @Override
     public Object clone() {
         return new JSONObject(new HashMap<>(this.container));
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        JSONObject that = (JSONObject) object;
+        return Objects.equals(container, that.container);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(container);
     }
 
     /* Override */

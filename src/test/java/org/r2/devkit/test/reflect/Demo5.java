@@ -23,19 +23,12 @@
  */
 package org.r2.devkit.test.reflect;
 
-import org.r2.devkit.io.IOAPI;
-import org.r2.devkit.json.JSON;
 import org.r2.devkit.test.TestCore;
 
-import java.io.IOException;
+public class Demo5 extends TestCore {
 
-public class Demo4 extends TestCore {
+    public static void main(String[] args) {
 
-    public static void main(String[] args) throws IOException {
-        String text = IOAPI.readLocalFileText("H:\\jsontest\\Bug_2_Test.json");
-        print(text);
-        JSON json = JSON.parse(text);
-        IOAPI.writeLocalFileText("H:/jsontest/Bug_2_Testttt.json", json.toJSONString());
     }
 
 }

@@ -4,6 +4,7 @@ import org.r2.devkit.json.JSON;
 import org.r2.devkit.json.JSONException;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * 表明JSON中的Number值
@@ -50,6 +51,19 @@ public final class JSONValueNumber extends JSON {
     @Override
     public String toString() {
         return this.toJSONString();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        JSONValueNumber number = (JSONValueNumber) object;
+        return Objects.equals(container, number.container);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(container);
     }
 
     @Override

@@ -21,21 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.r2.devkit.test.reflect;
+package org.r2.devkit.test.core;
 
-import org.r2.devkit.io.IOAPI;
-import org.r2.devkit.json.JSON;
-import org.r2.devkit.test.TestCore;
-
-import java.io.IOException;
-
-public class Demo4 extends TestCore {
-
-    public static void main(String[] args) throws IOException {
-        String text = IOAPI.readLocalFileText("H:\\jsontest\\Bug_2_Test.json");
-        print(text);
-        JSON json = JSON.parse(text);
-        IOAPI.writeLocalFileText("H:/jsontest/Bug_2_Testttt.json", json.toJSONString());
-    }
-
+public class Test1 {
 }

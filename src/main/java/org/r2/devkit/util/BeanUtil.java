@@ -1,7 +1,6 @@
 package org.r2.devkit.util;
 
 import org.r2.devkit.env.GlobalBeanConverter;
-import org.r2.devkit.env.GlobalBeanRelations;
 import org.r2.devkit.exception.BeanException;
 
 import java.lang.reflect.*;
@@ -14,7 +13,6 @@ import java.util.*;
 public final class BeanUtil {
 
     public static final GlobalBeanConverter CONVERTER = GlobalBeanConverter.getInstance();
-    public static final GlobalBeanRelations RELATIONS = GlobalBeanRelations.getInstance();
 
     /**
      * 通过字段键值对生成对象
@@ -49,7 +47,8 @@ public final class BeanUtil {
 
                 // construct
                 T instance = (T) constructor.newInstance(args);
-                return fillObject(map, instance);
+                // static和final字段被过滤
+                return fillObject(map, instance, (8 + 16));
             } catch (IllegalAccessException | InstantiationException | InvocationTargetException ignore) {
                 // try next constructor
             }
@@ -113,12 +112,13 @@ public final class BeanUtil {
 
     /**
      * 填充实例对象字段
-     * static, final字段不会填充
      * 类型不匹配且无法转换的字段将被跳过
+     *
+     * @param filter 被过滤的字段，将不会产生修改
      */
-    public static <T> T fillObject(Map<String, Object> state, T object) {
+    public static <T> T fillObject(Map<String, Object> state, T object, int filter) {
         Class clazz = object.getClass();
-        Field[] fields = queryFields(clazz, (8 + 16));
+        Field[] fields = queryFields(clazz, filter);
         for (Field field : fields) {
             String key = field.getName();
             Object body = state.get(key);
@@ -527,11 +527,12 @@ public final class BeanUtil {
     /**
      * 复制对象属性
      *
-     * @param origin
-     * @param dest
-     * @param filter
+     * @param origin 源
+     * @param dest   目标
+     * @param filter 过滤字段
      */
     public static void copyProperties(Object origin, Object dest, int filter) {
-        // todo
+        Map<String, Object> dat = object2Map(origin, filter);
+        fillObject(dat, dest, filter);
     }
 }

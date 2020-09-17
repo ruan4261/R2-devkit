@@ -2,6 +2,8 @@ package org.r2.devkit.json.field;
 
 import org.r2.devkit.json.JSON;
 
+import java.util.Objects;
+
 /**
  * 表明JSON中的Boolean值
  * JSONString表现为
@@ -49,6 +51,24 @@ public final class JSONValueBoolean extends JSON {
     @Override
     public String toJSONString() {
         return container ? TRUE : FALSE;
+    }
+
+    @Override
+    public String toString() {
+        return this.toJSONString();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        JSONValueBoolean that = (JSONValueBoolean) object;
+        return container == that.container;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(container);
     }
 
     /**

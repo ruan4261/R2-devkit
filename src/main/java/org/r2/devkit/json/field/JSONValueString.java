@@ -1,7 +1,10 @@
 package org.r2.devkit.json.field;
 
 import org.r2.devkit.json.JSON;
+import org.r2.devkit.json.serialize.JSONSerializer;
 import org.r2.devkit.util.Assert;
+
+import java.util.Objects;
 
 import static org.r2.devkit.json.JSONToken.*;
 
@@ -39,7 +42,20 @@ public final class JSONValueString extends JSON implements CharSequence {
 
     @Override
     public String toJSONString() {
-        return DOUBLE_QUOT + container + DOUBLE_QUOT;
+        return JSONSerializer.escapeAndQuot(this.container);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        JSONValueString that = (JSONValueString) object;
+        return Objects.equals(container, that.container);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(container);
     }
 
     @Override

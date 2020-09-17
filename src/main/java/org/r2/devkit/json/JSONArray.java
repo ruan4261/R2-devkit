@@ -92,7 +92,7 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
      */
     @Override
     public String toJSONString() {
-        return JSONSerializer.serializer(this, this.customSerializer);
+        return JSONSerializer.collection2JSONString(this, this.customSerializer);
     }
 
     @Override
@@ -103,6 +103,19 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
     @Override
     public Object clone() {
         return new JSONArray(new ArrayList<>(this.container));
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        JSONArray jsonArray = (JSONArray) object;
+        return Objects.equals(container, jsonArray.container);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(container);
     }
 
     /* List Override */

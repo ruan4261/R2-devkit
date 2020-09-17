@@ -55,28 +55,34 @@ interface FieldParser {
             if (preEscape) {
                 preEscape = false;
                 switch (c) {
-                    case REVERSE_SOLIDUS:
+                    case QUOT:// '
+                        body.append(QUOT);
+                        continue loop;
+                    case DOUBLE_QUOT:// "
+                        body.append(DOUBLE_QUOT);
+                        continue loop;
+                    case REVERSE_SOLIDUS:// \
                         body.append(REVERSE_SOLIDUS);
                         continue loop;
-                    case SOLIDUS:
+                    case SOLIDUS:// /
                         body.append(SOLIDUS);
                         continue loop;
-                    case LINE_FEED_CHAR:
+                    case LINE_FEED_CHAR:// n
                         body.append(LINE_FEED);
                         continue loop;
-                    case TAB_CHAR:
+                    case TAB_CHAR:// t
                         body.append(TAB);
                         continue loop;
-                    case CARRIAGE_RETURN_CHAR:
+                    case CARRIAGE_RETURN_CHAR:// r
                         body.append(CARRIAGE_RETURN);
                         continue loop;
-                    case BACKSPACE_CHAR:
+                    case BACKSPACE_CHAR:// b
                         body.append(BACKSPACE);
                         continue loop;
-                    case FORM_FEED_CHAR:
+                    case FORM_FEED_CHAR:// f
                         body.append(FORM_FEED);
                         continue loop;
-                    case UNICODE_CHAR:
+                    case UNICODE_CHAR:// u
                         if ((len - offset) < 4)
                             throw new JSONException("String cannot escape(off " + offset + ") : " + str);
 
