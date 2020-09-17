@@ -38,19 +38,16 @@ Business call title.
  
  Process finished with exit code 0
 ```
----
 **\#StackTraceElement\[] getStackTrace()**\
 获取栈跟踪信息，以本方法栈为顶栈的`StackTraceElement`数组。
 ```java
     return (new Throwable()).getStackTrace();
 ```
----
 **\#long currentTimestamp()**\
 当前时间戳，完全等同于`java.lang.System#currentTimeMillis`。
----
+
 **\#long nanoTime()**\
 纳秒记数，只能用于计时、相对比较，完全等同于`java.lang.System#nanoTime`。
----
 
 ### CacheBase
 ```java
