@@ -1,15 +1,15 @@
 ## org.r2.devkit
 > #### Package
-* [core](/core) ~~没什么用的包~~
-* [json](/json) JSON解析生成器
-* [serialize](/serialize) 序列化
-* [bean](/bean) JavaBean工具包
-* [util](/util) 通用工具包
-* [io](/io) IO流工具包
-* [http](/http) HTTP工具包
-* [time](/time) 时间接口
-* [env](/env) 运行环境
-* [codec](/codec) 编码解码工具包
+* [core](./core) ~~没什么用的包~~
+* [json](./json) JSON解析生成器
+* [serialize](./serialize) 序列化
+* [bean](./bean) JavaBean工具包
+* [util](./util) 通用工具包
+* [io](./io) IO流工具包
+* [http](./http) HTTP工具包
+* [time](./time) 时间接口
+* [env](./env) 运行环境
+* [codec](./codec) 编码解码工具包
 > #### Class
 * [CharLinkedSequence](#CharLinkedSequence) 链表模型的字符串修改
 * [MutableString](#MutableString) 可变字符串类
