@@ -60,7 +60,11 @@ public final class Cast {
      * 默认返回{@code BigDecimal.ZERO}
      */
     public static BigDecimal o2BigDecimal(Object val) {
-        if (val == null) return BigDecimal.ZERO;
+        return o2BigDecimal(val, BigDecimal.ZERO);
+    }
+
+    public static BigDecimal o2BigDecimal(Object val, BigDecimal defaultVal) {
+        if (val == null) return defaultVal;
         try {
             if (val instanceof Integer) {
                 return new BigDecimal((Integer) val);
@@ -74,16 +78,20 @@ public final class Cast {
                 return new BigDecimal(val.toString());
             }
         } catch (ArithmeticException | NumberFormatException ignore) {
-            return BigDecimal.ZERO;
+            return defaultVal;
         }
-        return BigDecimal.ZERO;
+        return defaultVal;
     }
 
     /**
      * 默认返回-1
      */
     public static Integer o2Integer(Object val) {
-        if (val == null) return -1;
+        return o2Integer(val, -1);
+    }
+
+    public static Integer o2Integer(Object val, int defaultVal) {
+        if (val == null) return defaultVal;
         try {
             if (val instanceof Number) {
                 return ((Number) val).intValue();
@@ -91,9 +99,8 @@ public final class Cast {
                 return Integer.parseInt(val.toString());
             }
         } catch (NumberFormatException ignore) {
-            return -1;
+            return defaultVal;
         }
-        return -1;
+        return defaultVal;
     }
-
 }
