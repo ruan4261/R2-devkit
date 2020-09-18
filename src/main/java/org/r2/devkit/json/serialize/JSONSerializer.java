@@ -5,8 +5,10 @@ import org.r2.devkit.json.JSON;
 import org.r2.devkit.json.JSONObject;
 import org.r2.devkit.serialize.CustomSerializer;
 import org.r2.devkit.json.field.JSONValueNull;
+import org.r2.devkit.util.Assert;
 import org.r2.devkit.util.BeanUtil;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -27,15 +29,16 @@ public final class JSONSerializer {
      * 优先级：
      * 1.null值的序列化只可能是null
      * 2.确切的类自定义序列化方案
-     * 3.集合框架，可构成JSON对象或数组
+     * 3.Map，集合框架，数组
      * 4.除框架以外的JSON类型使用toJSONString
      * 5.Number实现，直接使用toString，返回无引号数值
      * 6.字符串序列实现，使用toString加边界双引号
      * 7.有可继承的自定义序列化方案
-     * 8.默认为贫血对象，通过反射构造出实例状态的JSON对象
+     * 8.重写了toString()的JavaBean
+     * 9.没有重写toString的JavaBean，默认为贫血对象，通过反射构造出实例状态的JSON对象
      */
     @SuppressWarnings("unchecked")
-    public static String serializer(Object object, CustomSerializer serializer) {
+    public static <T> String serializer(Object object, CustomSerializer serializer) {
         // 1
         if (object == null)
             return JSONValueNull.getInstance().toString();
@@ -47,6 +50,8 @@ public final class JSONSerializer {
             return map2JSONString((Map) object, serializer);
         if (object instanceof Collection)
             return collection2JSONString((Collection) object, serializer);
+        if (object.getClass().isArray())
+            return array2JSONString(object, serializer);
         // 4
         if (object instanceof JSON)
             return ((JSON) object).toJSONString();
@@ -60,6 +65,9 @@ public final class JSONSerializer {
         if (serializer != null && serializer.hasCustomizer(object))
             return escapeAndQuot(serializer.serialize(object));
         // 8
+        if (BeanUtil.hasOwnMethod(object.getClass(), "toString", 8))
+            return escapeAndQuot(object.toString());
+        // 9
         return reflect2JSONString(object);
     }
 
@@ -122,6 +130,29 @@ public final class JSONSerializer {
         builder.append(LBRACKET);
 
         collection.forEach(
+                object -> builder.append(serializer(object, serializer)).append(COMMA)
+        );
+
+        // delete last comma
+        int last = builder.length() - 1;
+        if (builder.charAt(last) == COMMA)
+            builder.deleteCharAt(last);
+
+        builder.append(RBRACKET);
+        return builder.toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> String array2JSONString(Object object, CustomSerializer serializer) {
+        Assert.judge(() -> !object.getClass().isArray());
+        return array2JSONString((T[]) object, serializer);
+    }
+
+    public static <T> String array2JSONString(T[] a, CustomSerializer serializer) {
+        final StringBuilder builder = new StringBuilder((a.length << 2) + 4);
+        builder.append(LBRACKET);
+
+        Arrays.stream(a).forEach(
                 object -> builder.append(serializer(object, serializer)).append(COMMA)
         );
 

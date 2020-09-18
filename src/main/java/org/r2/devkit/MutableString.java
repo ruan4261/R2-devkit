@@ -17,8 +17,7 @@ import static org.r2.devkit.core.CacheBase.EMPTY;
 public final class MutableString implements Cloneable, Serializable {
     private static final long serialVersionUID = 1L;
     private boolean nullAble;
-
-    private String value;
+    private volatile String value;
 
     public MutableString(String value, boolean nullAble) {
         this.nullAble = nullAble;

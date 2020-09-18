@@ -61,13 +61,13 @@ public final class BeanUtil {
      * 值为实例当前的字段状态
      *
      * @param filter 该参数bit对应关键字将被过滤
-     * @see #queryFields(Class, int)
+     * @see ReflectUtil#queryFields(Class, int, boolean)
      */
     public static Map<String, Object> object2Map(Object object, int filter) {
         Assert.notNull(object);
         Class clazz = object.getClass();
 
-        Field[] fields = queryFields(clazz, filter);
+        Field[] fields = ReflectUtil.queryFields(clazz, filter, true);
 
         Map<String, Object> map = new HashMap<>(fields.length);
         for (Field field : fields) {
@@ -83,34 +83,6 @@ public final class BeanUtil {
     }
 
     /**
-     * 获取类的字段，参数为true时过滤对应关键字字段
-     * 进制从低位到高位的分部如下，step=1     位值
-     * public                              1
-     * private                             2
-     * protected                           4
-     * static                              8
-     * final                               16
-     * synchronized                        32
-     * volatile                            64
-     * transient                           128
-     * native                              256
-     * interface                           512
-     * abstract                            1024
-     * strict                              2048
-     *
-     * @param filter 该参数bit对应关键字将被过滤
-     */
-    public static Field[] queryFields(Class clazz, final int filter) {
-        Field[] fields = ArrayUtil.concat(clazz.getFields(), clazz.getDeclaredFields());
-        return Arrays.stream(fields)
-                .distinct()
-                .filter(field -> {
-                    int modifier = field.getModifiers();
-                    return (modifier & filter) == 0;
-                }).toArray(Field[]::new);
-    }
-
-    /**
      * 填充实例对象字段
      * 类型不匹配且无法转换的字段将被跳过
      *
@@ -118,7 +90,7 @@ public final class BeanUtil {
      */
     public static <T> T fillObject(Map<String, Object> state, T object, int filter) {
         Class clazz = object.getClass();
-        Field[] fields = queryFields(clazz, filter);
+        Field[] fields = ReflectUtil.queryFields(clazz, filter, true);
         for (Field field : fields) {
             String key = field.getName();
             Object body = state.get(key);
@@ -496,7 +468,7 @@ public final class BeanUtil {
      * @param methodName 目标方法
      * @param filter     修饰符过滤器
      * @param paramTypes 方法参数类型
-     * @see #queryFields(Class, int) filter描述
+     * @see ReflectUtil#queryFields(Class, int, boolean) filter描述
      */
     public static <T> boolean hasOwnMethod(Class<T> clazz, String methodName, int filter, Class<?>... paramTypes) {
         Assert.notNull(clazz);

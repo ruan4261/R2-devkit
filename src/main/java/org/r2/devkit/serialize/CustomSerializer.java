@@ -34,6 +34,10 @@ public final class CustomSerializer implements Cloneable, Serializable {
         this.customize = new ConcurrentHashMap<>(initialCapacity);
     }
 
+    public CustomSerializer(int initialCapacity, float loadFactor) {
+        this.customize = new ConcurrentHashMap<>(initialCapacity, loadFactor);
+    }
+
     public CustomSerializer(Map<Class, Bucket> map) {
         Assert.notNull(map);
         this.customize = new ConcurrentHashMap<>(map);
@@ -62,17 +66,20 @@ public final class CustomSerializer implements Cloneable, Serializable {
 
     /**
      * 获取对于目标类型优先级最高的序列化器
+     * 1.如果目标类型有对应的序列化器，其将被直接选中
+     * 2.如果某序列化器的优先级为MAX_INT，其将被直接选中，不继续判断后续选择器
+     * 3.优先级最高
      *
      * @throws UnsupportedClassException 不支持此类型的自定义序列化
      */
     @SuppressWarnings("unchecked")
     public <T> Serializer<T> prioritySerializer(Class<T> clazz) {
-        Set<Class> classes = ReflectUtil.getAllSuper(clazz);
+        Class[] classes = ReflectUtil.getAllSuper(clazz);
 
         final int[] max = {-1};
         final Serializer[] functions = {null};
 
-        classes.stream().anyMatch(c -> {
+        Arrays.stream(classes).anyMatch(c -> {
             Bucket bucket = this.customize.get(c);
             if (bucket != null) {
                 if (bucket.T == clazz) {
@@ -115,7 +122,7 @@ public final class CustomSerializer implements Cloneable, Serializable {
      */
     public boolean hasCustomizer(Class clazz) {
         if (isExistClassSerializer(clazz)) return true;
-        Set<Class> allClass = ReflectUtil.getAllSuper(clazz);
+        Class[] allClass = ReflectUtil.getAllSuper(clazz);
         for (Class c : allClass) {
             Bucket bucket = this.customize.get(c);
             if (bucket != null) {

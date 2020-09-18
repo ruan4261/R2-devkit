@@ -28,18 +28,18 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
         this.container = new ArrayList<>(initialCapacity);
     }
 
-    public JSONArray(List<Object> list) {
-        Assert.notNull(list, "list");
-        this.container = list;
-    }
-
     public <T> JSONArray(T[] a) {
         Assert.notNull(a);
         this.container = new ArrayList<>(Arrays.asList(a));
     }
 
+    public JSONArray(List<Object> list) {
+        Assert.notNull(list, "list");
+        this.container = list;
+    }
+
     /**
-     * newContainer为true的情况下，将构造一个新的List用于内部数据存储
+     * newContainer为true的情况下，将构造一个新的List用于内部容器
      * newContainer为false的情况下，该构造等同于普通的list构造
      */
     public JSONArray(List<Object> list, boolean newContainer) {
@@ -48,6 +48,14 @@ public final class JSONArray extends JSON implements CustomizableSerialization, 
             this.container = new ArrayList<>(list);
         else
             this.container = list;
+    }
+
+    /**
+     * 通过collection复制一个新的list用于内部容器
+     */
+    public JSONArray(Collection<Object> collection) {
+        Assert.notNull(collection, "collection");
+        this.container = new ArrayList<>(collection);
     }
 
     /**

@@ -1,11 +1,11 @@
 package org.r2.devkit.util;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
+ * 所有操作不应该更改数组内顺序
+ *
  * @author ruan4261
  */
 public final class ArrayUtil {
@@ -96,10 +96,34 @@ public final class ArrayUtil {
         return arr;
     }
 
+    /**
+     * 删除数组内重复元素
+     */
     @SuppressWarnings("unchecked")
     public static <T> T[] delRepeat(T[] a) {
         Assert.notNull(a);
-        Set<T> set = new HashSet<>(Arrays.asList(a));
-        return set.toArray((T[]) Array.newInstance(a.getClass().getComponentType(), 0));
+        LinkedHashSet set = new LinkedHashSet<>(a.length, 1f);
+        set.addAll(Arrays.asList(a));
+        return (T[]) set.toArray((T[]) Array.newInstance(a.getClass().getComponentType(), 0));
     }
+
+    /**
+     * 改变数组大小
+     * 支持扩大或缩小
+     * 如果数组扩大，原元素将被全部保留于原下标位置；
+     * 如果数组缩小，所有下标大于登录新数组长度的元素将被舍去。
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T[] arrayExtend(T[] a, int newLength) {
+        Assert.notNull(a);
+        Assert.notNeg(newLength);
+
+        Class type = a.getClass().getComponentType();
+        T[] res = (T[]) Array.newInstance(type, newLength);
+
+        int size = Math.min(newLength, a.length);
+        System.arraycopy(a, 0, res, 0, size);
+        return res;
+    }
+
 }

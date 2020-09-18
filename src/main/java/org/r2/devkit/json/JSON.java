@@ -9,6 +9,7 @@ import org.r2.devkit.util.BeanUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -82,8 +83,8 @@ public abstract class JSON implements JSONAware, Cloneable, Serializable {
             return (JSON) object;
         } else if (object.getClass().isArray()) {
             return new JSONArray((T[]) object);
-        } else if (object instanceof List) {
-            return new JSONArray((List<Object>) object, true);
+        } else if (object instanceof Collection) {
+            return new JSONArray((Collection<Object>) object);
         } else {
             return new JSONObject(BeanUtil.object2Map(object, 0));
         }

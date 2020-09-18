@@ -87,6 +87,32 @@ public class CharLinkedSequence implements Appendable {
         }
     }
 
+    /**
+     * 从头部开始删除指定的长度
+     */
+    public int removeHead(int len) {
+        Assert.judge(() -> len < 0 || len > this.length);
+        for (int i = 0; i < len; i++) {
+            head = head.next;
+        }
+        head.prev = null;
+        this.length -= len;
+        return this.length;
+    }
+
+    /**
+     * 从尾部开始删除指定的长度
+     */
+    public int removeTail(int len) {
+        Assert.judge(() -> len < 0 || len > this.length);
+        for (int i = 0; i < len; i++) {
+            tail = tail.prev;
+        }
+        tail.next = null;
+        this.length -= len;
+        return this.length;
+    }
+
     @Override
     public Appendable append(CharSequence csq) {
         return this.append(csq, 0, csq.length());
