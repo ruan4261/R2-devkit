@@ -6,7 +6,7 @@ import org.r2.devkit.json.serialize.JSONSerializer;
 import org.r2.devkit.json.util.JSONParseCheck;
 import org.r2.devkit.json.util.JSONStringParser;
 import org.r2.devkit.json.util.Holder;
-import org.r2.devkit.util.Assert;
+import org.r2.devkit.Assert;
 
 import java.util.*;
 

@@ -1,6 +1,6 @@
 package org.r2.devkit.env;
 
-import org.r2.devkit.custom.CustomConverter;
+import org.r2.devkit.bean.CustomConverter;
 
 /**
  * 全局环境下的Bean单向转换器

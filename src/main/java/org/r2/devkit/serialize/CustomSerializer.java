@@ -1,9 +1,9 @@
 package org.r2.devkit.serialize;
 
-import org.r2.devkit.exception.runtime.IllegalDataException;
-import org.r2.devkit.exception.runtime.UnsupportedClassException;
+import org.r2.devkit.IllegalDataException;
+import org.r2.devkit.UnsupportedClassException;
 import org.r2.devkit.util.ReflectUtil;
-import org.r2.devkit.util.Assert;
+import org.r2.devkit.Assert;
 
 import java.io.Serializable;
 import java.util.*;
@@ -50,18 +50,15 @@ public final class CustomSerializer implements Cloneable, Serializable {
      *
      * @throws UnsupportedClassException 不支持此类型的自定义序列化
      */
-    @SuppressWarnings("unchecked")
     public String serialize(Object object) {
         Assert.notNull(object);
-        if (this.isExistClassSerializer(object))
-            return this.classSerializer(object).serialize(object);
-        else
-            return this.prioritySerializer(object).serialize(object);
+        return this.prioritySerializer(object).serialize(object);
     }
 
     /** @see CustomSerializer#prioritySerializer(Class) */
-    public Serializer prioritySerializer(Object object) {
-        return this.prioritySerializer(object.getClass());
+    @SuppressWarnings("unchecked")
+    public <T> Serializer<T> prioritySerializer(T object) {
+        return (Serializer<T>) this.prioritySerializer(object.getClass());
     }
 
     /**
@@ -99,8 +96,9 @@ public final class CustomSerializer implements Cloneable, Serializable {
         return functions[0];
     }
 
-    public Serializer classSerializer(Object object) {
-        return this.classSerializer(object.getClass());
+    @SuppressWarnings("unchecked")
+    public <T> Serializer<T> classSerializer(T object) {
+        return (Serializer<T>) this.classSerializer(object.getClass());
     }
 
     @SuppressWarnings("unchecked")
@@ -140,7 +138,7 @@ public final class CustomSerializer implements Cloneable, Serializable {
     /**
      * 判断一个类有没有自定义序列化机制，其继承的序列化机制不算在内
      */
-    public boolean isExistClassSerializer(Class clazz) {
+    public boolean isExistClassSerializer(Class<?> clazz) {
         return this.customize.containsKey(clazz);
     }
 
@@ -161,6 +159,9 @@ public final class CustomSerializer implements Cloneable, Serializable {
         return this.customize.get(clazz).serializer;
     }
 
+    /**
+     * @throws IllegalDataException 如果该类序列化器不存在
+     */
     public void update(Class clazz, int level) {
         Bucket bucket = this.customize.get(clazz);
         if (bucket == null)
@@ -169,12 +170,22 @@ public final class CustomSerializer implements Cloneable, Serializable {
         bucket.level = level;
     }
 
+    /**
+     * @throws IllegalDataException 如果该类序列化器不存在
+     */
     public <T> void update(Class<T> clazz, Serializer<T> function) {
         Bucket bucket = this.customize.get(clazz);
         if (bucket == null)
             throw new IllegalDataException(clazz.getTypeName() + " doesn't have custom serializer.");
 
         bucket.serializer = function;
+    }
+
+    /**
+     * 如果该类序列化器不存在，将直接注册
+     */
+    public <T> void update(Class<T> clazz, int level, Serializer<T> function) {
+        this.register(clazz, level, function);
     }
 
     public void delete(Class clazz) {

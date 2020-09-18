@@ -21,13 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.r2.devkit.test.reflect;
+package org.r2.devkit;
 
-import org.r2.devkit.test.TestCore;
+/**
+ * Bean操作异常
+ *
+ * @author ruan4261
+ */
+public class BeanException extends ReflectiveOperationException {
+    private static final long serialVersionUID = 123456789L;
 
-public class Demo2 extends TestCore {
-
-    public static void main(String[] args) {
+    public BeanException() {
     }
 
+    public BeanException(String message) {
+        super(message);
+    }
+
+    public BeanException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public BeanException(Throwable cause) {
+        super(cause);
+    }
 }

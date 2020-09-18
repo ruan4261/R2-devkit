@@ -1,5 +1,7 @@
 package org.r2.devkit.util;
 
+import org.r2.devkit.Assert;
+
 import java.lang.reflect.Array;
 import java.util.*;
 

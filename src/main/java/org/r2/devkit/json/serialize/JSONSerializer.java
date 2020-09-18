@@ -5,8 +5,8 @@ import org.r2.devkit.json.JSON;
 import org.r2.devkit.json.JSONObject;
 import org.r2.devkit.serialize.CustomSerializer;
 import org.r2.devkit.json.field.JSONValueNull;
-import org.r2.devkit.util.Assert;
-import org.r2.devkit.util.BeanUtil;
+import org.r2.devkit.Assert;
+import org.r2.devkit.bean.BeanUtil;
 
 import java.util.Arrays;
 import java.util.Collection;

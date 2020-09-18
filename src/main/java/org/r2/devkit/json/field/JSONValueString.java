@@ -2,11 +2,9 @@ package org.r2.devkit.json.field;
 
 import org.r2.devkit.json.JSON;
 import org.r2.devkit.json.serialize.JSONSerializer;
-import org.r2.devkit.util.Assert;
+import org.r2.devkit.Assert;
 
 import java.util.Objects;
-
-import static org.r2.devkit.json.JSONToken.*;
 
 /**
  * 表明JSON中的String值

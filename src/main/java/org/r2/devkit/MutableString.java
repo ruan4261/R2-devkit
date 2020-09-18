@@ -1,7 +1,5 @@
 package org.r2.devkit;
 
-import org.r2.devkit.util.Assert;
-
 import java.io.Serializable;
 
 import static org.r2.devkit.core.CacheBase.EMPTY;

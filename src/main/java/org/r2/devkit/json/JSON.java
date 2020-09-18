@@ -1,11 +1,11 @@
 package org.r2.devkit.json;
 
-import org.r2.devkit.exception.BeanException;
+import org.r2.devkit.BeanException;
 import org.r2.devkit.json.util.Holder;
 import org.r2.devkit.json.util.JSONParseCheck;
 import org.r2.devkit.json.util.JSONStringParser;
-import org.r2.devkit.util.Assert;
-import org.r2.devkit.util.BeanUtil;
+import org.r2.devkit.Assert;
+import org.r2.devkit.bean.BeanUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;

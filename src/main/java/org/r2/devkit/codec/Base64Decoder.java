@@ -1,6 +1,6 @@
 package org.r2.devkit.codec;
 
-import org.r2.devkit.util.Assert;
+import org.r2.devkit.Assert;
 
 import java.util.Base64;
 

@@ -1,7 +1,7 @@
 package org.r2.devkit.env;
 
 import org.r2.devkit.core.CacheBase;
-import org.r2.devkit.util.Cast;
+import org.r2.devkit.Cast;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +39,7 @@ public final class EnvArgument implements CacheBase {
     }
 
     public String getString(String key) {
-        return Cast.toString(this.env.get(key));
+        return Cast.o2String(this.env.get(key));
     }
 
     public void clear() {

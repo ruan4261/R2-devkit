@@ -15,7 +15,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
-import org.r2.devkit.util.Assert;
+import org.r2.devkit.Assert;
 
 import java.io.File;
 import java.io.IOException;

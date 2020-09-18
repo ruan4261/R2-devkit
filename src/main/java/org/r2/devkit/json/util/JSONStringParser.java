@@ -1,12 +1,12 @@
 package org.r2.devkit.json.util;
 
-import org.r2.devkit.exception.runtime.IllegalDataException;
+import org.r2.devkit.IllegalDataException;
 import org.r2.devkit.json.JSON;
 import org.r2.devkit.json.JSONArray;
 import org.r2.devkit.json.JSONException;
 import org.r2.devkit.json.JSONObject;
 import org.r2.devkit.json.field.*;
-import org.r2.devkit.util.Assert;
+import org.r2.devkit.Assert;
 
 import static org.r2.devkit.json.JSONToken.*;
 import static org.r2.devkit.json.util.FieldParser.*;

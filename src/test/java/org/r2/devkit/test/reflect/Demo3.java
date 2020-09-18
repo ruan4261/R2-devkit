@@ -25,7 +25,6 @@ package org.r2.devkit.test.reflect;
 
 import org.r2.devkit.test.TestCore;
 import org.r2.devkit.test.mod.User;
-import org.r2.devkit.util.BeanUtil;
 import org.r2.devkit.util.ReflectUtil;
 
 public class Demo3 extends TestCore {

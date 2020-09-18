@@ -1,7 +1,5 @@
 package org.r2.devkit;
 
-import org.r2.devkit.util.Assert;
-
 /**
  * 以链表形式实现字符串快速修改
  * Thread unsafe
