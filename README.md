@@ -16,4 +16,4 @@
 
 ## LICENSE
 MIT License\
-Copyright (c) 2019-present,  ruan4261
+Copyright (c) 2020 ruan4261
