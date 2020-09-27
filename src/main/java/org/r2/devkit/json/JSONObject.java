@@ -135,6 +135,10 @@ public final class JSONObject extends JSON implements CustomizableSerialization,
         return this.container.containsValue(value);
     }
 
+    public Object get(String key) {
+        return this.container.get(key);
+    }
+
     @Override
     public Object get(Object key) {
         return this.container.get(key);
