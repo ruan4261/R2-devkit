@@ -1,7 +1,5 @@
 package org.r2.devkit.http;
 
-import static org.r2.devkit.core.CacheBase.EMPTY;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -17,6 +15,8 @@ import java.util.Map;
  * @author ruan4261
  */
 public interface BasicQuery {
+
+    String EMPTY = "";
 
     /**
      * 生成MethodGet的URI

@@ -2,8 +2,6 @@ package org.r2.devkit;
 
 import java.io.Serializable;
 
-import static org.r2.devkit.core.CacheBase.EMPTY;
-
 /**
  * 可变字符串
  * 当{@code NullAble}为{@code false}时，内置字符串对象不可能为空，将其置为空会触发异常
@@ -16,6 +14,7 @@ public final class MutableString implements Cloneable, Serializable {
     private static final long serialVersionUID = 1L;
     private boolean nullAble;
     private volatile String value;
+    private static final String EMPTY = "";
 
     public MutableString(String value, boolean nullAble) {
         this.nullAble = nullAble;

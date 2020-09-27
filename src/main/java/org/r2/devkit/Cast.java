@@ -5,8 +5,6 @@ import org.r2.devkit.bean.BeanUtil;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import static org.r2.devkit.core.CacheBase.*;
-
 /**
  * @author ruan4261
  */
@@ -15,6 +13,8 @@ public final class Cast {
     private Cast() {
         throw new AssertionError("No Cast instances for you!");
     }
+
+    private static final String EMPTY = "";
 
     /**
      * 调用{@code val.toString()}，如果{@code val}为{@code null}，返回参数{@code defaultVal}，
@@ -25,10 +25,10 @@ public final class Cast {
     }
 
     /**
-     * 参数为NULL时返回空字符串
+     * 参数为NULL时返回''空字符串
      */
     public static String o2String(Object val) {
-        return val == null ? NULL : o2String(val, EMPTY);
+        return o2String(val, EMPTY);
     }
 
     /**
