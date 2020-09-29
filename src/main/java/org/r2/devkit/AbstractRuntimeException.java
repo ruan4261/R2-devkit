@@ -1,8 +1,6 @@
 package org.r2.devkit;
 
-import static org.r2.devkit.core.CacheBase.LINE_SEPARATOR;
-
-import static org.r2.devkit.core.SystemAPI.currentTimestamp;
+import static org.r2.devkit.core.SystemAPI.*;
 
 /**
  * 抽象运行时异常类，继承自{@code RuntimeException}，新增dateTime属性用于记录异常发生时间。
@@ -10,7 +8,7 @@ import static org.r2.devkit.core.SystemAPI.currentTimestamp;
  * @author ruan4261
  */
 public abstract class AbstractRuntimeException extends RuntimeException {
-
+    private static final long serialVersionUID = 1L;
     private final long occurrenceTimestamp;
 
     {

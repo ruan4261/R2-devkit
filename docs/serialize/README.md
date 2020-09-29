@@ -28,7 +28,7 @@
 * `boolean hasCustomizer(Class)`
 * `boolean hasCustomizer(Object)`
 
-#### 获取指定类独栋序列化器
+#### 获取指定类的序列化器
 如果不存指定类的序列化器，将会抛出`UnsupportedClassException`异常。
 * `Serializer<T> classSerializer(Class<T>)`
 * `Serializer<T> classSerializer(T)`

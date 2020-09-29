@@ -202,4 +202,5 @@ public interface DateTimeAPI {
     static String convertPattern(String time, DateTimeFormatter originPattern, DateTimeFormatter destPattern) {
         return LocalDateTime.parse(time, originPattern).format(destPattern);
     }
+
 }
