@@ -13,6 +13,7 @@
 
 ## 第三方SDK
 * Apache HttpClient
+###### 详见配置文件pom.xml
 
 ## LICENSE
 MIT License\
