@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Signature-Version: 0.1.0
+Signature-Version: 0.2.0
 Created-By: ruan4261
 Bundle-Name: r2-devkit
 Bundle-License: MIT
-Bundle-Version: 0.1.0
+Bundle-Version: 0.2.0

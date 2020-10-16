@@ -121,11 +121,11 @@ public final class ArrayUtil {
         Assert.notNeg(newLength);
 
         Class type = a.getClass().getComponentType();
-        T[] res = (T[]) Array.newInstance(type, newLength);
+        T[] dest = (T[]) Array.newInstance(type, newLength);
 
         int size = Math.min(newLength, a.length);
-        System.arraycopy(a, 0, res, 0, size);
-        return res;
+        System.arraycopy(a, 0, dest, 0, size);
+        return dest;
     }
 
 }
