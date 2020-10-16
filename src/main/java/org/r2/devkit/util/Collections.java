@@ -12,17 +12,20 @@ import java.util.Set;
  */
 public class Collections {
 
+    private Collections() {
+    }
+
     /**
      * 这是一个特殊类型的Map，请勿向下转型
      * 调用get等同于调用getOrDefault，默认值在类实例化时设置
      * getOrDefault仍可以使用
      * 您可以使用反射调用类的{@code setDefault(Object)}方法修改默认值
      */
-    public <K, V> Map<K, V> defaultValueMap(Map<K, V> m, V defaultVal) {
+    public static <K, V> Map<K, V> defaultValueMap(Map<K, V> m, V defaultVal) {
         return new NotNullMap<>(m, defaultVal);
     }
 
-    public static final class NotNullMap<K, V> implements Map<K, V>, Serializable {
+    private static final class NotNullMap<K, V> implements Map<K, V>, Serializable {
         private static final long serialVersionUID = 1L;
         private final Map<K, V> m;
         private V defaultVal;
