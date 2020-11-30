@@ -42,7 +42,8 @@ public interface Base64Encoder {
 
     static String toBase64String(byte[] bytes, boolean isUrlSafe) {
         Assert.notNull(bytes);
-        return new String(toBase64(bytes, isUrlSafe));
+        Base64.Encoder encoder = isUrlSafe ? Base64.getUrlEncoder() : Base64.getEncoder();
+        return encoder.encodeToString(bytes);
     }
 
     static String toBase64String(String origin, boolean isUrlSafe) {
