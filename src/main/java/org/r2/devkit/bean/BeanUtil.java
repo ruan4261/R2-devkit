@@ -26,8 +26,8 @@ public final class BeanUtil {
     public static <T> T map2Object(Map<String, Object> map, Class<T> clazz) throws BeanException {
         Assert.notNull(map);
         Assert.notNull(clazz);
-        Constructor[] constructors = clazz.getConstructors();
-        for (Constructor constructor : constructors) {
+        Constructor<T>[] constructors = (Constructor<T>[]) clazz.getConstructors();
+        for (Constructor<T> constructor : constructors) {
             // 任意一个可行的构造器
             try {
                 if (!constructor.isAccessible())
@@ -39,7 +39,7 @@ public final class BeanUtil {
                 for (int i = 0; i < params.length; i++) {
                     Parameter param = params[i];
                     String paramName = param.getName();
-                    Class fieldType = param.getType();
+                    Class<?> fieldType = param.getType();
                     Object body = map.get(paramName);
                     if (body == null || fieldType == Object.class)
                         args[i] = body;
@@ -68,7 +68,7 @@ public final class BeanUtil {
      */
     public static Map<String, Object> object2Map(Object object, int filter) {
         Assert.notNull(object);
-        Class clazz = object.getClass();
+        Class<?> clazz = object.getClass();
 
         Field[] fields = ReflectUtil.queryFields(clazz, filter, true);
 
@@ -92,7 +92,7 @@ public final class BeanUtil {
      * @param filter 被过滤的字段，将不会产生修改
      */
     public static <T> T fillObject(Map<String, Object> state, T object, int filter) {
-        Class clazz = object.getClass();
+        Class<?> clazz = object.getClass();
         Field[] fields = ReflectUtil.queryFields(clazz, filter, true);
         for (Field field : fields) {
             String key = field.getName();
@@ -112,28 +112,33 @@ public final class BeanUtil {
 
     /**
      * 该方法尽最大可能允许任意类型间的转换
-     * CASE
-     * 1.继承关系
-     * 2.全局自定义转换器
-     * 3.目标为基本类型
-     * 4.目标为字符串（任何类型都会强行转换为字符串）
-     * 5.目标为数组或集合框架（该情况下，如果源类型不为数组或集合框架，会抛出异常）
-     * 6.不同Map子类之间的数据转移
-     * 7.map源转换为贫血模型
-     * 8.贫血模型转换为map实例
-     * 9.贫血模型转换为贫血模型
+     * <h2>CASE:</h2>
+     * <ol>
+     *     <li>继承关系，可强行转换</li>
+     *     <li>全局自定义转换器</li>
+     *     <li>目标为基本类型</li>
+     *     <li>目标为字符串（任何类型都会强行转换为字符串，你可以通过自定义转换器来代替目标的toString）</li>
+     *     <li>目标为数组或集合框架（该情况下，如果源类型不为数组或集合框架，会抛出异常）</li>
+     *     <li>不同Map子类之间的数据转移</li>
+     *     <li>map源转换为贫血模型</li>
+     *     <li>贫血模型转换为map实例</li>
+     *     <li>贫血模型转换为贫血模型</li>
+     * </ol>
+     * 以目标为数组或集合框架为分界线，往后的实例需要目标自身构造进行创建，目标类型不能为接口或抽象类，且需要拥有一个空参构造
      *
      * @param clazz    目标类型，不可为空
      * @param object   源，该参数为空，整个方法返回值为空
      * @param <T>      目标对象类型
      * @param <TChild> 如果目标对象类型T是集合框架，此泛型是T的类型参数，否则TChild不存在
      * @throws BeanException 无法转换类型实例
+     * @deprecated 这个方法没什么意义，在完全无法预料源类型的情况下不可能进行类型转换...
      */
     @SuppressWarnings("unchecked")
+    @Deprecated
     public static <T, TChild> T convert(Class<T> clazz, Object object) throws BeanException {
         Assert.notNull(clazz);
         if (object == null) return null;
-        Class origin = object.getClass();
+        Class<?> origin = object.getClass();
 
         // 1.继承关系
         if (clazz.isInstance(object)) {
@@ -158,7 +163,7 @@ public final class BeanUtil {
         // 5.1.目标类型为数组
         if (clazz.isArray()) {
             // 数组元素类型
-            Class type = clazz.getComponentType();
+            Class<?> type = clazz.getComponentType();
 
             // 辨别源类型
             if (origin.isArray()) {
@@ -176,7 +181,7 @@ public final class BeanUtil {
                 }
             } else if (object instanceof Collection) {
                 // collection2array
-                Collection collection = (Collection) object;
+                Collection<?> collection = (Collection<?>) object;
                 int len = collection.size();
                 if (len == 0) return (T) Array.newInstance(type, 0);
 
@@ -192,6 +197,9 @@ public final class BeanUtil {
             }
         }
 
+        // 判断目标类型是否可以被构造
+
+
         // 5.2.目标类型为集合框架
         if (Collection.class.isAssignableFrom(clazz)) {
             // 获取目标泛型
@@ -204,10 +212,10 @@ public final class BeanUtil {
                     Type[] paramTypes = parameterizedType.getActualTypeArguments();
                     if (paramTypes != null && paramTypes.length > 0) {
                         Type t = paramTypes[0];
-                        if (t instanceof ParameterizedType)
-                            type = (Class<TChild>) ((ParameterizedType) t).getRawType();
-                        else if (t instanceof Class)
+                        if (t instanceof Class)
                             type = (Class<TChild>) t;
+                        else if (t instanceof ParameterizedType)
+                            type = (Class<TChild>) ((ParameterizedType) t).getRawType();
                     }
                 }
             }
@@ -231,7 +239,7 @@ public final class BeanUtil {
 
             } else if (object instanceof Collection) {
                 // collection2collection
-                Collection collection = (Collection) object;
+                Collection<TChild> collection = (Collection<TChild>) object;
                 for (Object ele : collection) {
                     targetCollection.add(convert(type, ele));
                 }
@@ -274,7 +282,7 @@ public final class BeanUtil {
         return map2Object(dat, clazz);
     }
 
-    public static boolean isPrimitive(Class clazz) {
+    public static boolean isPrimitive(Class<?> clazz) {
         switch (clazz.getSimpleName()) {
             case "Byte":
             case "Integer":

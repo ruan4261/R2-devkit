@@ -90,7 +90,7 @@ public final class ReflectUtil {
      * @param filter 该参数bit对应关键字将被过滤
      * @param parent 是否获取父类的字段
      */
-    public static Field[] queryFields(Class clazz, final int filter, boolean parent) {
+    public static Field[] queryFields(Class<?> clazz, final int filter, boolean parent) {
         if (!parent) {
             // Case 不获取父类
             return Arrays.stream(clazz.getDeclaredFields())

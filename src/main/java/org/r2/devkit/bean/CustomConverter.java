@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CustomConverter {
 
-    private final ConcurrentHashMap<String, ConvertGroup> beanConvertGroup;
+    private final ConcurrentHashMap<String, ConvertGroup<?,?>> beanConvertGroup;
 
     {
         this.beanConvertGroup = new ConcurrentHashMap<>();
@@ -67,7 +67,7 @@ public class CustomConverter {
         Assert.notNull(origin);
         Assert.notNull(target);
         String key = origin.getClass().toString() + target.toString();
-        ConvertGroup<O, T> convertGroup = this.beanConvertGroup.get(key);
+        ConvertGroup<O, T> convertGroup = (ConvertGroup<O, T>) this.beanConvertGroup.get(key);
         Assert.notNull(convertGroup, "Cannot find Converter, may it was not registered.");
         return convertGroup.convert(origin);
     }

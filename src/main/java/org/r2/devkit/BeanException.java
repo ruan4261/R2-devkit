@@ -5,7 +5,7 @@ package org.r2.devkit;
  *
  * @author ruan4261
  */
-public class BeanException extends ReflectiveOperationException {
+public class BeanException extends RuntimeException {
     private static final long serialVersionUID = 123456789L;
 
     public BeanException() {
