@@ -19,7 +19,7 @@ public final class ArrayUtil {
     public static <T> T[] concat(T[] a1, T[] a2) {
         Assert.notNull(a1);
         Assert.notNull(a2);
-        Class type = a1.getClass().getComponentType();
+        Class<?> type = a1.getClass().getComponentType();
         T[] arr = (T[]) Array.newInstance(type, a1.length + a2.length);
         System.arraycopy(a1, 0, arr, 0, a1.length);
         System.arraycopy(a2, 0, arr, a1.length, a2.length);
@@ -104,9 +104,9 @@ public final class ArrayUtil {
     @SuppressWarnings("unchecked")
     public static <T> T[] delRepeat(T[] a) {
         Assert.notNull(a);
-        LinkedHashSet set = new LinkedHashSet<>(a.length, 1f);
+        LinkedHashSet<T> set = new LinkedHashSet<>(a.length, 1f);
         set.addAll(Arrays.asList(a));
-        return (T[]) set.toArray((T[]) Array.newInstance(a.getClass().getComponentType(), 0));
+        return set.toArray((T[]) Array.newInstance(a.getClass().getComponentType(), 0));
     }
 
     /**
@@ -120,7 +120,7 @@ public final class ArrayUtil {
         Assert.notNull(a);
         Assert.notNeg(newLength);
 
-        Class type = a.getClass().getComponentType();
+        Class<?> type = a.getClass().getComponentType();
         T[] dest = (T[]) Array.newInstance(type, newLength);
 
         int size = Math.min(newLength, a.length);

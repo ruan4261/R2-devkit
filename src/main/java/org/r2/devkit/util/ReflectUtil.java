@@ -16,13 +16,13 @@ public final class ReflectUtil {
      * 包括更上层的超类和他们实现的接口
      * 数组顺序是：自身->自身接口->超类->超类接口->超类的超类->超类的超类的接口->...
      */
-    public static Class[] getAllSuper(Class clazz) {
-        Class[] classes = new Class[4];
+    public static Class<?>[] getAllSuper(Class<?> clazz) {
+        Class<?>[] classes = new Class[4];
 
         int count = 0;
         while (clazz != null) {
             classes[count++] = clazz;
-            Class[] interfaces = clazz.getInterfaces();
+            Class<?>[] interfaces = clazz.getInterfaces();
 
             clazz = clazz.getSuperclass();
 
@@ -41,7 +41,7 @@ public final class ReflectUtil {
         if (count == classes.length)
             return ArrayUtil.delRepeat(classes);
         else {
-            Class[] res = new Class[count];
+            Class<?>[] res = new Class[count];
             System.arraycopy(classes, 0, res, 0, count);
             return ArrayUtil.delRepeat(res);
         }
@@ -53,7 +53,7 @@ public final class ReflectUtil {
      * 如果自身的字段名称与继承的字段名称相同，将选择自身的字段
      */
     public static Object getProperty(Object object, String fieldName) throws NoSuchFieldException {
-        Class clazz = object.getClass();
+        Class<?> clazz = object.getClass();
 
         while (clazz != null) {
             try {
@@ -117,4 +117,5 @@ public final class ReflectUtil {
                     return (modifier & filter) == 0;
                 }).toArray(Field[]::new);
     }
+
 }
