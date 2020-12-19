@@ -65,7 +65,7 @@ public final class JSONStringParser {
         循环1,2,3,4
         */
         loop:
-        for (; offset < len; ) {
+        while (offset < len) {
             char c = str.charAt(offset);
             if (isIgnorable(c)) {
                 offset++;
@@ -156,7 +156,7 @@ public final class JSONStringParser {
         JSONArray body = new JSONArray();
 
         loop:
-        for (; offset < len; ) {
+        while (offset < len) {
             char c = str.charAt(offset);
             if (isIgnorable(c)) {
                 offset++;
@@ -214,7 +214,7 @@ public final class JSONStringParser {
         Assert.legalOffset(str, offset);
         final int len = str.length();
 
-        for (; offset < len; ) {
+        while (offset < len) {
             char c = str.charAt(offset);
             if (isIgnorable(c)) {
                 offset++;
@@ -260,7 +260,7 @@ public final class JSONStringParser {
         Assert.legalOffset(str, offset);
         final int len = str.length();
 
-        for (; offset < len; ) {
+        while (offset < len) {
             char c = str.charAt(offset);
             if (isIgnorable(c)) {
                 offset++;

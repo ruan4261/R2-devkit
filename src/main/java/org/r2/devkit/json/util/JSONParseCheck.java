@@ -20,7 +20,7 @@ public final class JSONParseCheck {
      */
     public static void ignore(String str, int offset, String mes) {
         final int len = str.length();
-        for (; offset < len; ) {
+        while (offset < len) {
             char c = str.charAt(offset++);
             if (!JSONToken.isIgnorable(c))
                 throw new JSONException(mes);

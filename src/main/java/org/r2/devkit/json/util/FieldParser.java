@@ -18,7 +18,7 @@ import static org.r2.devkit.json.JSONToken.REVERSE_SOLIDUS;
  * @see JSONValueBoolean
  * @see JSONValueNull
  */
-interface FieldParser {
+class FieldParser {
 
     /**
      * 从str的下标offset开始，解析出一个JSONValueString对象，将会遵循RFC4627对内容进行转义
@@ -48,7 +48,7 @@ interface FieldParser {
         boolean preEscape = false;// 前一个字符为反斜杠
 
         loop:
-        for (; offset < len; ) {
+        while (offset < len) {
             char c = str.charAt(offset++);
 
             // 当前字符需要被转义
