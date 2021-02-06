@@ -13,6 +13,12 @@ public class ThreadMXBeanTest extends TestCore {
         print("PeakThreadCount", threadMXBean.getPeakThreadCount());// 虚拟机峰值总线程数
         print("TotalStartedThreadCount", threadMXBean.getTotalStartedThreadCount());// 虚拟机启动以来总线程数
         print("DaemonThreadCount", threadMXBean.getDaemonThreadCount());// 当前虚拟机守护线程数
+        
+        long[] threads = threadMXBean.getAllThreadIds();
+        print(threads);// 所有线程id
+        for (long thread : threads) {
+            print(threadMXBean.getThreadInfo(thread));
+        }
     }
 
 }
