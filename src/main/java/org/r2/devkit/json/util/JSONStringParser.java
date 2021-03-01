@@ -44,7 +44,7 @@ public final class JSONStringParser {
         final int len = str.length();
 
         // 0:首字符，必须为 {
-        for (; offset < len; ) {
+        while (offset < len) {
             char c = str.charAt(offset++);
             if (!isIgnorable(c)) {
                 if (LBRACE == c)

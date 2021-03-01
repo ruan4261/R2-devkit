@@ -5,7 +5,9 @@ package org.r2.devkit;
  * Thread unsafe
  *
  * @author ruan4261
+ * @deprecated arraycopy比这快多了, 这类没b用
  */
+@Deprecated
 public class CharLinkedSequence implements Appendable {
 
     private Node head;
